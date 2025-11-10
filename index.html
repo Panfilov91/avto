@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Orders Registry</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header class="app__header">
+        <div>
+          <h1>Orders Registry</h1>
+          <p class="app__subtitle">
+            Display, filter, and manage customer orders with live analytics.
+          </p>
+        </div>
+      </header>
+
+      <section class="summary" aria-live="polite">
+        <div class="summary__cards" id="summaryCards"></div>
+      </section>
+
+      <section class="controls">
+        <div class="controls__search">
+          <label for="searchInput" class="sr-only">Quick search</label>
+          <input
+            type="search"
+            id="searchInput"
+            placeholder="Search by order number or client"
+            autocomplete="off"
+          />
+        </div>
+        <button type="button" id="clearFiltersBtn" class="button button--ghost">
+          Clear filters
+        </button>
+      </section>
+
+      <section class="filter-panel" aria-label="Filters">
+        <div class="filter-block">
+          <h2 class="filter-block__title">Status</h2>
+          <div class="status-chips" id="statusChips"></div>
+        </div>
+        <div class="filter-block">
+          <h2 class="filter-block__title">Date range</h2>
+          <div class="filter-block__inputs">
+            <label class="field">
+              <span class="field__label">From</span>
+              <input type="date" id="startDate" />
+            </label>
+            <label class="field">
+              <span class="field__label">To</span>
+              <input type="date" id="endDate" />
+            </label>
+          </div>
+        </div>
+        <div class="filter-block">
+          <h2 class="filter-block__title">Client</h2>
+          <label class="field">
+            <span class="field__label sr-only">Client</span>
+            <select id="clientFilter"></select>
+          </label>
+        </div>
+        <div class="filter-block">
+          <h2 class="filter-block__title">Lift</h2>
+          <label class="field">
+            <span class="field__label sr-only">Lift</span>
+            <select id="liftFilter"></select>
+          </label>
+        </div>
+      </section>
+
+      <section class="table-section" aria-live="polite">
+        <div class="table-wrapper">
+          <table class="table" id="ordersTable">
+            <thead>
+              <tr>
+                <th>
+                  <button class="table__sort" type="button" data-sort-key="orderNumber">
+                    Order #
+                    <span class="table__sort-icon" aria-hidden="true"></span>
+                  </button>
+                </th>
+                <th>Client</th>
+                <th>Vehicle</th>
+                <th>Status</th>
+                <th>
+                  <button class="table__sort" type="button" data-sort-key="scheduledDate">
+                    Scheduled
+                    <span class="table__sort-icon" aria-hidden="true"></span>
+                  </button>
+                </th>
+                <th>Completed</th>
+                <th>
+                  <button class="table__sort" type="button" data-sort-key="total">
+                    Total
+                    <span class="table__sort-icon" aria-hidden="true"></span>
+                  </button>
+                </th>
+                <th>Lift</th>
+                <th class="table__actions-heading">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="ordersTableBody"></tbody>
+          </table>
+          <div class="empty-state" id="emptyState" hidden>
+            No orders found. Adjust your filters or search to see results.
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div class="modal" id="orderModal" role="dialog" aria-modal="true" hidden>
+      <div class="modal__overlay" data-dismiss="modal"></div>
+      <div class="modal__content" role="document">
+        <button class="modal__close" type="button" data-dismiss="modal" aria-label="Close">&times;</button>
+        <h2 class="modal__title">View / Edit Order</h2>
+        <form id="orderForm" class="modal__form">
+          <div class="modal__grid">
+            <label class="field">
+              <span class="field__label">Order number</span>
+              <input type="text" id="orderNumberInput" readonly />
+            </label>
+            <label class="field">
+              <span class="field__label">Client</span>
+              <input type="text" id="clientInput" required />
+            </label>
+            <label class="field">
+              <span class="field__label">Vehicle</span>
+              <input type="text" id="vehicleInput" required />
+            </label>
+            <label class="field">
+              <span class="field__label">Status</span>
+              <select id="statusInput" required></select>
+            </label>
+            <label class="field">
+              <span class="field__label">Scheduled date</span>
+              <input type="date" id="scheduledDateInput" />
+            </label>
+            <label class="field">
+              <span class="field__label">Completed date</span>
+              <input type="date" id="completedDateInput" />
+            </label>
+            <label class="field">
+              <span class="field__label">Total</span>
+              <input type="number" id="totalInput" step="0.01" min="0" required />
+            </label>
+            <label class="field">
+              <span class="field__label">Lift</span>
+              <input type="text" id="liftInput" required />
+            </label>
+            <label class="field field--checkbox">
+              <input type="checkbox" id="calendarBookingInput" />
+              <span class="field__label">Has active calendar booking</span>
+            </label>
+            <label class="field field--textarea">
+              <span class="field__label">Notes</span>
+              <textarea id="notesInput" rows="3" placeholder="Optional"></textarea>
+            </label>
+          </div>
+          <div class="modal__footer">
+            <button type="button" class="button button--ghost" data-dismiss="modal">Cancel</button>
+            <button type="submit" class="button button--primary">Save changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <template id="statusChipTemplate">
+      <button type="button" class="status-chip" data-status="">
+        <span class="status-chip__label"></span>
+        <span class="status-chip__count"></span>
+      </button>
+    </template>
+
+    <script src="app.js" type="module"></script>
+  </body>
+</html>

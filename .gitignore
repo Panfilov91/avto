@@ -1,0 +1,8 @@
+# Node and general artifacts
+node_modules/
+dist/
+build/
+.DS_Store
+.env
+coverage/
+.tmp/
