@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Management System</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="print-styles.css" media="print">
+</head>
+<body>
+    <div id="app">
+        <header class="app-header">
+            <h1>Order Management System</h1>
+            <div class="company-info">
+                <strong>AutoService Pro</strong>
+                <span>Professional Vehicle Maintenance</span>
+            </div>
+        </header>
+
+        <main id="main-content">
+            <section class="controls-section">
+                <div class="filters">
+                    <h2>Filters</h2>
+                    <div class="filter-group">
+                        <label for="filter-status">Status:</label>
+                        <select id="filter-status">
+                            <option value="">All</option>
+                            <option value="pending">Pending</option>
+                            <option value="completed">Completed</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="filter-client">Client:</label>
+                        <input type="text" id="filter-client" placeholder="Search by client name">
+                    </div>
+                    <div class="filter-group">
+                        <label for="filter-date-from">Date From:</label>
+                        <input type="date" id="filter-date-from">
+                    </div>
+                    <div class="filter-group">
+                        <label for="filter-date-to">Date To:</label>
+                        <input type="date" id="filter-date-to">
+                    </div>
+                    <button id="apply-filters" class="btn btn-primary">Apply Filters</button>
+                    <button id="reset-filters" class="btn btn-secondary">Reset</button>
+                </div>
+
+                <div class="actions">
+                    <h2>Actions</h2>
+                    <button id="export-csv" class="btn btn-success">
+                        <span class="icon">📥</span> Export to CSV
+                    </button>
+                </div>
+            </section>
+
+            <section class="orders-section">
+                <h2>Orders Registry</h2>
+                <div class="table-container">
+                    <table id="orders-table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Date</th>
+                                <th>Client</th>
+                                <th>Vehicle</th>
+                                <th>Status</th>
+                                <th>Total (€)</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orders-tbody">
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+
+        <div id="print-container" class="print-container"></div>
+
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2 id="modal-title">Export Options</h2>
+                <div id="modal-body"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="export.js"></script>
+    <script src="print.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

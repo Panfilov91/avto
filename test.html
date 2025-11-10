@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Order Management System</title>
+</head>
+<body>
+    <h1>Test Suite</h1>
+    <div id="results"></div>
+
+    <script src="data.js"></script>
+    <script src="export.js"></script>
+    <script src="print.js"></script>
+    
+    <script>
+        const results = document.getElementById('results');
+        let testsPassed = 0;
+        let testsFailed = 0;
+
+        function test(name, fn) {
+            try {
+                fn();
+                results.innerHTML += `<p style="color: green;">✓ ${name}</p>`;
+                testsPassed++;
+            } catch (e) {
+                results.innerHTML += `<p style="color: red;">✗ ${name}: ${e.message}</p>`;
+                testsFailed++;
+                console.error(name, e);
+            }
+        }
+
+        test('ordersData is defined and has items', () => {
+            if (!ordersData || ordersData.length === 0) {
+                throw new Error('ordersData is empty or undefined');
+            }
+        });
+
+        test('calculateOrderTotals function exists', () => {
+            if (typeof calculateOrderTotals !== 'function') {
+                throw new Error('calculateOrderTotals is not a function');
+            }
+        });
+
+        test('calculateOrderTotals works correctly', () => {
+            const totals = calculateOrderTotals(ordersData[0]);
+            if (!totals.total || totals.total <= 0) {
+                throw new Error('Total calculation failed');
+            }
+        });
+
+        test('exportToCSV function exists', () => {
+            if (typeof exportToCSV !== 'function') {
+                throw new Error('exportToCSV is not a function');
+            }
+        });
+
+        test('exportToCSV generates valid CSV', () => {
+            const csv = exportToCSV(ordersData);
+            if (!csv.includes('Order ID') || !csv.includes('ORD-2024-001')) {
+                throw new Error('CSV content invalid');
+            }
+        });
+
+        test('escapeCSVValue handles special characters', () => {
+            const result = escapeCSVValue('test, "quoted"');
+            if (!result.includes('"')) {
+                throw new Error('CSV escaping failed');
+            }
+        });
+
+        test('generatePrintHTML function exists', () => {
+            if (typeof generatePrintHTML !== 'function') {
+                throw new Error('generatePrintHTML is not a function');
+            }
+        });
+
+        test('generatePrintHTML generates valid HTML', () => {
+            const html = generatePrintHTML(ordersData[0]);
+            if (!html.includes('print-order') || !html.includes('AutoService Pro')) {
+                throw new Error('Print HTML generation failed');
+            }
+        });
+
+        test('generateStandaloneHTML function exists', () => {
+            if (typeof generateStandaloneHTML !== 'function') {
+                throw new Error('generateStandaloneHTML is not a function');
+            }
+        });
+
+        test('generateStandaloneHTML generates complete HTML document', () => {
+            const html = generateStandaloneHTML(ordersData[0]);
+            if (!html.includes('<!DOCTYPE html>') || !html.includes('<style>')) {
+                throw new Error('Standalone HTML generation failed');
+            }
+        });
+
+        test('escapeHTML function exists and works', () => {
+            if (typeof escapeHTML !== 'function') {
+                throw new Error('escapeHTML is not a function');
+            }
+            const result = escapeHTML('<script>alert("test")</script>');
+            if (result.includes('<script>')) {
+                throw new Error('HTML escaping failed');
+            }
+        });
+
+        test('All orders have required fields', () => {
+            ordersData.forEach((order, idx) => {
+                if (!order.id || !order.client || !order.vehicle || !order.services || !order.parts) {
+                    throw new Error(`Order ${idx} missing required fields`);
+                }
+            });
+        });
+
+        test('Discount calculations work correctly', () => {
+            const order1 = ordersData[0];
+            const totals1 = calculateOrderTotals(order1);
+            if (order1.discountType === 'fixed' && totals1.discountAmount !== order1.discount) {
+                throw new Error('Fixed discount calculation incorrect');
+            }
+            
+            const order2 = ordersData[1];
+            const totals2 = calculateOrderTotals(order2);
+            if (order2.discountType === 'percentage') {
+                const expectedDiscount = totals2.subtotal * (order2.discount / 100);
+                if (Math.abs(totals2.discountAmount - expectedDiscount) > 0.01) {
+                    throw new Error('Percentage discount calculation incorrect');
+                }
+            }
+        });
+
+        test('VAT calculations work correctly', () => {
+            const order = ordersData[0];
+            const totals = calculateOrderTotals(order);
+            const expectedVAT = totals.afterDiscount * (order.vatRate / 100);
+            if (Math.abs(totals.vatAmount - expectedVAT) > 0.01) {
+                throw new Error('VAT calculation incorrect');
+            }
+        });
+
+        results.innerHTML += `<hr><p><strong>Tests Passed: ${testsPassed}</strong></p>`;
+        results.innerHTML += `<p><strong>Tests Failed: ${testsFailed}</strong></p>`;
+        
+        if (testsFailed === 0) {
+            results.innerHTML += `<p style="color: green; font-size: 20px;">✓ All tests passed!</p>`;
+        } else {
+            results.innerHTML += `<p style="color: red; font-size: 20px;">✗ Some tests failed!</p>`;
+        }
+    </script>
+</body>
+</html>
