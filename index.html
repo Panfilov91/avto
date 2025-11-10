@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lift Scheduling Calendar</title>
+    <link rel="stylesheet" href="styles/calendar.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <h1>Lift Scheduling Calendar</h1>
+            <div class="header-controls">
+                <button id="prevWeek" class="nav-button" aria-label="Previous week">← Previous</button>
+                <span id="weekDisplay" class="week-display"></span>
+                <button id="nextWeek" class="nav-button" aria-label="Next week">Next →</button>
+            </div>
+        </header>
+
+        <main class="calendar-section">
+            <aside class="sidebar">
+                <h2>Filters</h2>
+                <div class="filter-group">
+                    <label for="liftFilter">Filter by Lift:</label>
+                    <select id="liftFilter" aria-label="Filter by lift">
+                        <option value="">All Lifts</option>
+                    </select>
+                </div>
+                <div class="status-legend">
+                    <h3>Status Legend</h3>
+                    <div class="legend-item">
+                        <span class="status-color status-free"></span>
+                        <span>Free</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="status-color status-reserved"></span>
+                        <span>Reserved</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="status-color status-in-progress"></span>
+                        <span>In Progress</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="status-color status-overdue"></span>
+                        <span>Overdue</span>
+                    </div>
+                </div>
+            </aside>
+
+            <div class="calendar-wrapper">
+                <table class="calendar-table" role="grid" aria-label="Week view calendar">
+                    <thead>
+                        <tr>
+                            <th class="lift-header">Lift</th>
+                            <th class="day-header" data-day="0">Monday</th>
+                            <th class="day-header" data-day="1">Tuesday</th>
+                            <th class="day-header" data-day="2">Wednesday</th>
+                            <th class="day-header" data-day="3">Thursday</th>
+                            <th class="day-header" data-day="4">Friday</th>
+                            <th class="day-header" data-day="5">Saturday</th>
+                            <th class="day-header" data-day="6">Sunday</th>
+                        </tr>
+                    </thead>
+                    <tbody id="calendarBody">
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <div id="assignmentModal" class="modal hidden">
+        <div class="modal-content">
+            <button class="modal-close" aria-label="Close modal">&times;</button>
+            <h2>Assign Order to Time Slot</h2>
+            <form id="assignmentForm">
+                <div class="form-group">
+                    <label for="orderSelect">Select Order:</label>
+                    <select id="orderSelect" required aria-label="Select order">
+                        <option value="">-- Select an order --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="timeSlotInput">Time Slot:</label>
+                    <input type="text" id="timeSlotInput" readonly aria-label="Time slot">
+                </div>
+                <div class="form-group">
+                    <label for="statusSelect">Status:</label>
+                    <select id="statusSelect" required aria-label="Select status">
+                        <option value="reserved">Reserved</option>
+                        <option value="in-progress">In Progress</option>
+                        <option value="overdue">Overdue</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Assign</button>
+                    <button type="button" class="btn-secondary" id="cancelAssignment">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="orderDetailsTooltip" class="tooltip hidden" role="tooltip">
+        <div class="tooltip-content"></div>
+    </div>
+
+    <div id="conflictAlert" class="alert alert-error hidden" role="alert">
+        <span id="conflictMessage"></span>
+        <button class="alert-close" aria-label="Close alert">&times;</button>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/calendar.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
