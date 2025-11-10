@@ -1,0 +1,22 @@
+{
+  "name": "order-management-system",
+  "version": "1.0.0",
+  "description": "Order creation and management system with service catalog integration",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "test": "node --test src/**/*.test.js",
+    "lint": "eslint src",
+    "format": "prettier --write src"
+  },
+  "keywords": ["order", "management", "service", "catalog"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^8.0.0",
+    "prettier": "^3.0.0"
+  }
+}
