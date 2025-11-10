@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vehicle Registry & Calendar Management</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-container">
+    <header>
+      <h1>Vehicle Registry & Calendar Management</h1>
+      <button class="settings-btn" aria-label="Open settings" title="Settings">⚙️</button>
+    </header>
+
+    <nav class="main-nav" role="navigation">
+      <button class="nav-btn active" data-section="registry" aria-selected="true">Registry</button>
+      <button class="nav-btn" data-section="calendar" aria-selected="false">Calendar</button>
+      <button class="nav-btn" data-section="forms" aria-selected="false">Forms</button>
+    </nav>
+
+    <main class="main-content">
+      <!-- Registry Section -->
+      <section id="registry" class="section active" role="region" aria-label="Vehicle registry">
+        <h2>Vehicle Registry</h2>
+        <div class="registry-controls">
+          <input type="text" id="registry-search" placeholder="Search by plate or phone..." aria-label="Search registry">
+          <select id="status-filter" aria-label="Filter by status">
+            <option value="">All Statuses</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+            <option value="maintenance">Maintenance</option>
+          </select>
+          <select id="workload-filter" aria-label="Filter by workload">
+            <option value="">All Workloads</option>
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+          </select>
+        </div>
+        <div class="legend">
+          <h3>Status Legend</h3>
+          <div class="legend-items">
+            <div class="legend-item">
+              <span class="color-indicator status-active"></span>
+              <label>Active</label>
+            </div>
+            <div class="legend-item">
+              <span class="color-indicator status-inactive"></span>
+              <label>Inactive</label>
+            </div>
+            <div class="legend-item">
+              <span class="color-indicator status-maintenance"></span>
+              <label>Maintenance</label>
+            </div>
+          </div>
+          <h3>Workload Legend</h3>
+          <div class="legend-items">
+            <div class="legend-item">
+              <span class="color-indicator workload-low"></span>
+              <label>Low</label>
+            </div>
+            <div class="legend-item">
+              <span class="color-indicator workload-medium"></span>
+              <label>Medium</label>
+            </div>
+            <div class="legend-item">
+              <span class="color-indicator workload-high"></span>
+              <label>High</label>
+            </div>
+          </div>
+        </div>
+        <table class="registry-table" role="grid" aria-label="Vehicle registry table">
+          <thead>
+            <tr>
+              <th scope="col">Plate</th>
+              <th scope="col">Phone</th>
+              <th scope="col">Status</th>
+              <th scope="col">Workload</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="registry-body">
+            <!-- Data will be populated here -->
+          </tbody>
+        </table>
+        <div id="registry-empty" class="empty-state">
+          No vehicles found. Use forms to add new vehicles.
+        </div>
+      </section>
+
+      <!-- Calendar Section -->
+      <section id="calendar" class="section" role="region" aria-label="Calendar view">
+        <h2>Calendar View</h2>
+        <div class="calendar-controls">
+          <button id="prev-month" aria-label="Previous month">← Previous</button>
+          <h3 id="calendar-month" aria-live="polite"></h3>
+          <button id="next-month" aria-label="Next month">Next →</button>
+        </div>
+        <div class="calendar-grid" role="grid" aria-label="Calendar">
+          <div class="weekdays">
+            <div class="weekday">Sun</div>
+            <div class="weekday">Mon</div>
+            <div class="weekday">Tue</div>
+            <div class="weekday">Wed</div>
+            <div class="weekday">Thu</div>
+            <div class="weekday">Fri</div>
+            <div class="weekday">Sat</div>
+          </div>
+          <div id="calendar-days" class="days"></div>
+        </div>
+        <div class="legend">
+          <h3>Calendar Status Legend</h3>
+          <div class="legend-items">
+            <div class="legend-item">
+              <span class="color-indicator status-active"></span>
+              <label>Active Tasks</label>
+            </div>
+            <div class="legend-item">
+              <span class="color-indicator status-maintenance"></span>
+              <label>Maintenance Scheduled</label>
+            </div>
+            <div class="legend-item">
+              <span class="color-indicator status-inactive"></span>
+              <label>No Activity</label>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Forms Section -->
+      <section id="forms" class="section" role="region" aria-label="Vehicle entry forms">
+        <h2>Add or Edit Vehicle</h2>
+        <form id="vehicle-form" class="vehicle-form" novalidate>
+          <div class="form-group">
+            <label for="plate">Vehicle Plate <span class="required" aria-label="required">*</span></label>
+            <input 
+              type="text" 
+              id="plate" 
+              name="plate" 
+              placeholder="A000AA00"
+              required
+              aria-required="true"
+              aria-describedby="plate-error plate-hint"
+            >
+            <small id="plate-hint" class="form-hint">Format: A000AA00 (Letter, 3 digits, 2 letters, 2 digits)</small>
+            <span id="plate-error" class="form-error" role="alert"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="phone">Phone Number <span class="required" aria-label="required">*</span></label>
+            <input 
+              type="tel" 
+              id="phone" 
+              name="phone" 
+              placeholder="+7 (900) 000-00-00"
+              required
+              aria-required="true"
+              aria-describedby="phone-error phone-hint"
+            >
+            <small id="phone-hint" class="form-hint">Format: +7 (XXX) XXX-XX-XX</small>
+            <span id="phone-error" class="form-error" role="alert"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="status">Status <span class="required" aria-label="required">*</span></label>
+            <select id="status" name="status" required aria-required="true" aria-describedby="status-error">
+              <option value="">-- Select Status --</option>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+              <option value="maintenance">Maintenance</option>
+            </select>
+            <span id="status-error" class="form-error" role="alert"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="workload">Workload Level <span class="required" aria-label="required">*</span></label>
+            <select id="workload" name="workload" required aria-required="true" aria-describedby="workload-error">
+              <option value="">-- Select Workload --</option>
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+            </select>
+            <span id="workload-error" class="form-error" role="alert"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="notes">Notes</label>
+            <textarea id="notes" name="notes" rows="4" aria-describedby="notes-hint"></textarea>
+            <small id="notes-hint" class="form-hint">Optional notes about the vehicle</small>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn-primary">Save Vehicle</button>
+            <button type="reset" class="btn-secondary">Clear Form</button>
+          </div>
+        </form>
+      </section>
+    </main>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="settings-title" hidden>
+      <div class="modal-overlay"></div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="settings-title">Settings</h2>
+          <button class="modal-close" aria-label="Close settings">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="settings-section">
+            <h3>Data Management</h3>
+            <p>Manage your application data and settings.</p>
+            <div class="setting-item">
+              <h4>Clear Local Storage</h4>
+              <p class="setting-description">Remove all saved data and reset the application to its initial state.</p>
+              <button id="clear-storage-btn" class="btn-danger">Clear Storage</button>
+            </div>
+            <div class="setting-item">
+              <h4>Reseed Sample Data</h4>
+              <p class="setting-description">Regenerate sample vehicle data for testing.</p>
+              <button id="reseed-data-btn" class="btn-secondary">Reseed Data</button>
+            </div>
+          </div>
+          <div class="settings-section">
+            <h3>Accessibility</h3>
+            <p>Application is designed with accessibility in mind.</p>
+            <ul class="accessibility-list">
+              <li>High contrast color palette (WCAG AA compliant)</li>
+              <li>Keyboard navigation throughout</li>
+              <li>Semantic HTML and ARIA labels</li>
+              <li>Form validation with clear error messages</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmation-modal" class="modal" role="alertdialog" aria-modal="true" aria-labelledby="confirm-title" hidden>
+      <div class="modal-overlay"></div>
+      <div class="modal-content modal-small">
+        <div class="modal-header">
+          <h2 id="confirm-title">Confirm Action</h2>
+        </div>
+        <div class="modal-body">
+          <p id="confirm-message"></p>
+        </div>
+        <div class="modal-footer">
+          <button id="confirm-cancel" class="btn-secondary">Cancel</button>
+          <button id="confirm-ok" class="btn-danger">Confirm</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="notification" class="notification" role="status" aria-live="polite" aria-atomic="true"></div>
+  </div>
+
+  <script src="js/inputMask.js"></script>
+  <script src="js/validation.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/registry.js"></script>
+  <script src="js/calendar.js"></script>
+  <script src="js/forms.js"></script>
+  <script src="js/settings.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

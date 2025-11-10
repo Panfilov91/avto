@@ -1,0 +1,19 @@
+{
+  "name": "registry-management-app",
+  "version": "1.0.0",
+  "description": "Vehicle registry and calendar management application with validation and accessibility features",
+  "main": "index.html",
+  "scripts": {
+    "start": "python3 -m http.server 8000",
+    "test": "echo \"No tests configured\""
+  },
+  "keywords": [
+    "registry",
+    "vehicle",
+    "calendar",
+    "validation",
+    "accessibility"
+  ],
+  "author": "",
+  "license": "MIT"
+}
