@@ -1,0 +1,186 @@
+@media print {
+    @page {
+        size: A4;
+        margin: 15mm;
+    }
+
+    body {
+        background: white;
+        color: black;
+        font-size: 12pt;
+    }
+
+    .app-header,
+    .controls-section,
+    .orders-section,
+    main,
+    .modal,
+    .btn,
+    button,
+    nav,
+    .no-print {
+        display: none !important;
+    }
+
+    .print-container {
+        display: block !important;
+    }
+
+    .print-order {
+        page-break-after: always;
+        font-family: Arial, sans-serif;
+    }
+
+    .print-order:last-child {
+        page-break-after: auto;
+    }
+
+    .print-header {
+        border-bottom: 3px solid #667eea;
+        padding-bottom: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .print-company-name {
+        font-size: 24pt;
+        font-weight: bold;
+        color: #667eea;
+        margin-bottom: 0.5rem;
+    }
+
+    .print-company-tagline {
+        font-size: 11pt;
+        color: #666;
+        margin-bottom: 0.5rem;
+    }
+
+    .print-company-contact {
+        font-size: 10pt;
+        color: #666;
+    }
+
+    .print-title {
+        font-size: 18pt;
+        font-weight: bold;
+        margin: 1.5rem 0;
+        color: #333;
+    }
+
+    .print-section {
+        margin-bottom: 1.5rem;
+    }
+
+    .print-section-title {
+        font-size: 14pt;
+        font-weight: bold;
+        margin-bottom: 0.75rem;
+        color: #667eea;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 0.25rem;
+    }
+
+    .print-info-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .print-info-item {
+        margin-bottom: 0.5rem;
+    }
+
+    .print-info-label {
+        font-weight: bold;
+        color: #555;
+        display: inline-block;
+        min-width: 120px;
+    }
+
+    .print-info-value {
+        color: #333;
+    }
+
+    .print-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 1rem;
+    }
+
+    .print-table th {
+        background-color: #f0f0f0;
+        border: 1px solid #ccc;
+        padding: 0.5rem;
+        text-align: left;
+        font-weight: bold;
+        font-size: 10pt;
+    }
+
+    .print-table td {
+        border: 1px solid #ccc;
+        padding: 0.5rem;
+        font-size: 10pt;
+    }
+
+    .print-table tfoot td {
+        font-weight: bold;
+        background-color: #f9f9f9;
+    }
+
+    .print-totals {
+        margin-top: 1rem;
+        float: right;
+        width: 50%;
+    }
+
+    .print-total-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.4rem 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .print-total-row.grand-total {
+        font-size: 14pt;
+        font-weight: bold;
+        border-top: 2px solid #333;
+        border-bottom: 3px double #333;
+        margin-top: 0.5rem;
+        padding-top: 0.5rem;
+    }
+
+    .print-footer {
+        margin-top: 2rem;
+        padding-top: 1rem;
+        border-top: 1px solid #ddd;
+        font-size: 9pt;
+        color: #666;
+        clear: both;
+    }
+
+    .print-status {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 4px;
+        font-size: 10pt;
+        font-weight: bold;
+    }
+
+    .print-status.pending {
+        background-color: #fef3c7;
+        color: #92400e;
+        border: 1px solid #fcd34d;
+    }
+
+    .print-status.completed {
+        background-color: #d1fae5;
+        color: #065f46;
+        border: 1px solid #6ee7b7;
+    }
+
+    .print-status.cancelled {
+        background-color: #fee2e2;
+        color: #991b1b;
+        border: 1px solid #fca5a5;
+    }
+}
