@@ -3,200 +3,603 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vehicle Registry & Calendar Management</title>
+  <title>Avto Management System - Complete</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="app-container">
     <header>
-      <h1>Vehicle Registry & Calendar Management</h1>
+      <h1>Avto Management System</h1>
       <button class="settings-btn" aria-label="Open settings" title="Settings">⚙️</button>
     </header>
 
     <nav class="main-nav" role="navigation">
-      <button class="nav-btn active" data-section="registry" aria-selected="true">Registry</button>
+      <button class="nav-btn active" data-section="directories" aria-selected="true">Directories</button>
+      <button class="nav-btn" data-section="order-form" aria-selected="false">New Order</button>
+      <button class="nav-btn" data-section="orders-registry" aria-selected="false">Orders Registry</button>
       <button class="nav-btn" data-section="calendar" aria-selected="false">Calendar</button>
-      <button class="nav-btn" data-section="forms" aria-selected="false">Forms</button>
+      <button class="nav-btn" data-section="export" aria-selected="false">Export</button>
     </nav>
 
     <main class="main-content">
-      <!-- Registry Section -->
-      <section id="registry" class="section active" role="region" aria-label="Vehicle registry">
-        <h2>Vehicle Registry</h2>
-        <div class="registry-controls">
-          <input type="text" id="registry-search" placeholder="Search by plate or phone..." aria-label="Search registry">
-          <select id="status-filter" aria-label="Filter by status">
-            <option value="">All Statuses</option>
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
-            <option value="maintenance">Maintenance</option>
-          </select>
-          <select id="workload-filter" aria-label="Filter by workload">
-            <option value="">All Workloads</option>
-            <option value="low">Low</option>
-            <option value="medium">Medium</option>
-            <option value="high">High</option>
-          </select>
+      <!-- Directories Section -->
+      <section id="directories" class="section active" role="region" aria-label="Directories Management">
+        <div class="sub-nav">
+          <button class="sub-nav-btn active" data-tab="clients">Clients</button>
+          <button class="sub-nav-btn" data-tab="vehicles">Vehicles</button>
+          <button class="sub-nav-btn" data-tab="services">Services</button>
         </div>
-        <div class="legend">
-          <h3>Status Legend</h3>
-          <div class="legend-items">
-            <div class="legend-item">
-              <span class="color-indicator status-active"></span>
-              <label>Active</label>
-            </div>
-            <div class="legend-item">
-              <span class="color-indicator status-inactive"></span>
-              <label>Inactive</label>
-            </div>
-            <div class="legend-item">
-              <span class="color-indicator status-maintenance"></span>
-              <label>Maintenance</label>
-            </div>
+
+        <!-- Clients Tab -->
+        <div id="clients-tab" class="tab-content active">
+          <div class="section-header">
+            <h2>Clients</h2>
+            <button class="btn btn-primary" id="add-client-btn">Add Client</button>
           </div>
-          <h3>Workload Legend</h3>
-          <div class="legend-items">
-            <div class="legend-item">
-              <span class="color-indicator workload-low"></span>
-              <label>Low</label>
-            </div>
-            <div class="legend-item">
-              <span class="color-indicator workload-medium"></span>
-              <label>Medium</label>
-            </div>
-            <div class="legend-item">
-              <span class="color-indicator workload-high"></span>
-              <label>High</label>
-            </div>
+          
+          <div class="filters">
+            <input type="text" id="client-search" placeholder="Search clients..." class="search-input" aria-label="Search clients">
+            <select id="client-type-filter" class="filter-select" aria-label="Filter by client type">
+              <option value="">All Clients</option>
+              <option value="individual">Individual</option>
+              <option value="corporate">Corporate</option>
+            </select>
+          </div>
+
+          <div id="clients-list" class="cards-container">
+            <!-- Client cards will be dynamically inserted here -->
           </div>
         </div>
-        <table class="registry-table" role="grid" aria-label="Vehicle registry table">
-          <thead>
-            <tr>
-              <th scope="col">Plate</th>
-              <th scope="col">Phone</th>
-              <th scope="col">Status</th>
-              <th scope="col">Workload</th>
-              <th scope="col">Actions</th>
-            </tr>
-          </thead>
-          <tbody id="registry-body">
-            <!-- Data will be populated here -->
-          </tbody>
-        </table>
-        <div id="registry-empty" class="empty-state">
-          No vehicles found. Use forms to add new vehicles.
+
+        <!-- Vehicles Tab -->
+        <div id="vehicles-tab" class="tab-content">
+          <div class="section-header">
+            <h2>Vehicles</h2>
+            <button class="btn btn-primary" id="add-vehicle-btn">Add Vehicle</button>
+          </div>
+          
+          <div class="filters">
+            <input type="text" id="vehicle-search" placeholder="Search vehicles..." class="search-input" aria-label="Search vehicles">
+            <select id="vehicle-client-filter" class="filter-select" aria-label="Filter by client">
+              <option value="">All Clients</option>
+            </select>
+          </div>
+
+          <div id="vehicles-list" class="cards-container">
+            <!-- Vehicle cards will be dynamically inserted here -->
+          </div>
+        </div>
+
+        <!-- Services Tab -->
+        <div id="services-tab" class="tab-content">
+          <div class="section-header">
+            <h2>Services</h2>
+            <button class="btn btn-primary" id="add-service-btn">Add Service</button>
+          </div>
+          
+          <div class="filters">
+            <input type="text" id="service-search" placeholder="Search services..." class="search-input" aria-label="Search services">
+            <select id="service-category-filter" class="filter-select" aria-label="Filter by category">
+              <option value="">All Categories</option>
+              <option value="Maintenance">Maintenance</option>
+              <option value="Repair">Repair</option>
+              <option value="Diagnostic">Diagnostic</option>
+              <option value="Detailing">Detailing</option>
+              <option value="Inspection">Inspection</option>
+            </select>
+          </div>
+
+          <div id="services-list" class="cards-container">
+            <!-- Service cards will be dynamically inserted here -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Order Form Section -->
+      <section id="order-form" class="section" role="region" aria-label="Create Order">
+        <h2>Create Order-Narad</h2>
+        <form id="order-entry-form" class="order-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="order-client">Client <span class="required">*</span></label>
+              <select id="order-client" required aria-required="true">
+                <option value="">Select Client</option>
+              </select>
+              <span class="form-error" role="alert"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="order-vehicle">Vehicle <span class="required">*</span></label>
+              <select id="order-vehicle" required aria-required="true">
+                <option value="">Select Vehicle</option>
+              </select>
+              <span class="form-error" role="alert"></span>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="order-date">Scheduled Date <span class="required">*</span></label>
+              <input type="date" id="order-date" required aria-required="true">
+              <span class="form-error" role="alert"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="order-lift">Lift</label>
+              <select id="order-lift" aria-label="Select lift">
+                <option value="">No Lift Assigned</option>
+                <option value="Lift 1">Lift 1</option>
+                <option value="Lift 2">Lift 2</option>
+                <option value="Lift 3">Lift 3</option>
+                <option value="Lift 4">Lift 4</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <h3>Services</h3>
+            <div id="service-selector">
+              <button type="button" class="btn btn-secondary" id="add-service-line-btn">+ Add Service</button>
+            </div>
+            <div id="order-services-list" class="services-list">
+              <!-- Service line items will be added here -->
+            </div>
+          </div>
+
+          <div class="form-section">
+            <h3>Summary</h3>
+            <div class="order-summary">
+              <div class="summary-row">
+                <span>Subtotal:</span>
+                <span id="order-subtotal">0.00</span>
+              </div>
+              <div class="summary-row">
+                <label for="order-discount">Discount (%):</label>
+                <input type="number" id="order-discount" min="0" max="100" value="0" step="0.1">
+              </div>
+              <div class="summary-row">
+                <span>Discount Amount:</span>
+                <span id="order-discount-amount">0.00</span>
+              </div>
+              <div class="summary-row">
+                <span>Subtotal after Discount:</span>
+                <span id="order-subtotal-after-discount">0.00</span>
+              </div>
+              <div class="summary-row">
+                <span>VAT (20%):</span>
+                <span id="order-vat">0.00</span>
+              </div>
+              <div class="summary-row total">
+                <span>Total:</span>
+                <span id="order-total">0.00</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="order-notes">Notes</label>
+            <textarea id="order-notes" rows="4" placeholder="Additional notes..."></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn-primary">Create Order</button>
+            <button type="reset" class="btn-secondary">Clear Form</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Orders Registry Section -->
+      <section id="orders-registry" class="section" role="region" aria-label="Orders Registry">
+        <h2>Orders Registry</h2>
+        
+        <section class="summary" aria-live="polite">
+          <div class="summary__cards" id="summary-cards">
+            <div class="summary-card">
+              <h3>Total Orders</h3>
+              <p id="total-orders">0</p>
+            </div>
+            <div class="summary-card">
+              <h3>Pending</h3>
+              <p id="pending-orders">0</p>
+            </div>
+            <div class="summary-card">
+              <h3>In Progress</h3>
+              <p id="in-progress-orders">0</p>
+            </div>
+            <div class="summary-card">
+              <h3>Completed</h3>
+              <p id="completed-orders">0</p>
+            </div>
+            <div class="summary-card">
+              <h3>Total Revenue</h3>
+              <p id="total-revenue">$0.00</p>
+            </div>
+          </div>
+        </section>
+
+        <div class="controls">
+          <div class="controls__search">
+            <input
+              type="search"
+              id="order-search-input"
+              placeholder="Search by order number or client"
+              autocomplete="off"
+              aria-label="Search orders"
+            />
+          </div>
+          <button type="button" id="clear-filters-btn" class="btn btn-secondary">
+            Clear filters
+          </button>
+        </div>
+
+        <div class="filter-panel" aria-label="Filters">
+          <div class="filter-block">
+            <h3 class="filter-block__title">Status</h3>
+            <div class="status-chips" id="status-chips">
+              <label class="status-chip">
+                <input type="checkbox" value="draft"> Draft
+              </label>
+              <label class="status-chip">
+                <input type="checkbox" value="scheduled"> Scheduled
+              </label>
+              <label class="status-chip">
+                <input type="checkbox" value="in-progress"> In Progress
+              </label>
+              <label class="status-chip">
+                <input type="checkbox" value="completed"> Completed
+              </label>
+            </div>
+          </div>
+
+          <div class="filter-block">
+            <h3 class="filter-block__title">Date range</h3>
+            <div class="filter-block__inputs">
+              <label class="field">
+                <span class="field__label">From</span>
+                <input type="date" id="order-start-date" />
+              </label>
+              <label class="field">
+                <span class="field__label">To</span>
+                <input type="date" id="order-end-date" />
+              </label>
+            </div>
+          </div>
+
+          <div class="filter-block">
+            <h3 class="filter-block__title">Client</h3>
+            <select id="order-client-filter" class="filter-select">
+              <option value="">All Clients</option>
+            </select>
+          </div>
+
+          <div class="filter-block">
+            <h3 class="filter-block__title">Lift</h3>
+            <select id="order-lift-filter" class="filter-select">
+              <option value="">All Lifts</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="table-section" aria-live="polite">
+          <div class="table-wrapper">
+            <table class="table" id="orders-table">
+              <thead>
+                <tr>
+                  <th>
+                    <button class="table__sort" type="button" data-sort-key="orderNumber">
+                      Order #
+                      <span class="table__sort-icon" aria-hidden="true"></span>
+                    </button>
+                  </th>
+                  <th>Client</th>
+                  <th>Vehicle</th>
+                  <th>Status</th>
+                  <th>
+                    <button class="table__sort" type="button" data-sort-key="scheduledDate">
+                      Scheduled
+                      <span class="table__sort-icon" aria-hidden="true"></span>
+                    </button>
+                  </th>
+                  <th>Completed</th>
+                  <th>
+                    <button class="table__sort" type="button" data-sort-key="total">
+                      Total
+                      <span class="table__sort-icon" aria-hidden="true"></span>
+                    </button>
+                  </th>
+                  <th>Lift</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="orders-table-body">
+                <!-- Orders will be populated here -->
+              </tbody>
+            </table>
+          </div>
+          <div id="orders-empty" class="empty-state">
+            No orders found. Create your first order to get started.
+          </div>
         </div>
       </section>
 
       <!-- Calendar Section -->
       <section id="calendar" class="section" role="region" aria-label="Calendar view">
-        <h2>Calendar View</h2>
+        <h2>Lift Scheduling Calendar</h2>
         <div class="calendar-controls">
-          <button id="prev-month" aria-label="Previous month">← Previous</button>
-          <h3 id="calendar-month" aria-live="polite"></h3>
-          <button id="next-month" aria-label="Next month">Next →</button>
+          <button id="prev-week" class="nav-button" aria-label="Previous week">← Previous</button>
+          <h3 id="week-display" aria-live="polite"></h3>
+          <button id="next-week" class="nav-button" aria-label="Next week">Next →</button>
         </div>
-        <div class="calendar-grid" role="grid" aria-label="Calendar">
-          <div class="weekdays">
-            <div class="weekday">Sun</div>
-            <div class="weekday">Mon</div>
-            <div class="weekday">Tue</div>
-            <div class="weekday">Wed</div>
-            <div class="weekday">Thu</div>
-            <div class="weekday">Fri</div>
-            <div class="weekday">Sat</div>
-          </div>
-          <div id="calendar-days" class="days"></div>
+
+        <div class="calendar-filters">
+          <label for="lift-filter">Filter by Lift:</label>
+          <select id="lift-filter" aria-label="Filter by lift">
+            <option value="">All Lifts</option>
+            <option value="Lift 1">Lift 1</option>
+            <option value="Lift 2">Lift 2</option>
+            <option value="Lift 3">Lift 3</option>
+            <option value="Lift 4">Lift 4</option>
+          </select>
         </div>
-        <div class="legend">
-          <h3>Calendar Status Legend</h3>
+
+        <div class="calendar-legend">
+          <h3>Status Legend</h3>
           <div class="legend-items">
             <div class="legend-item">
-              <span class="color-indicator status-active"></span>
-              <label>Active Tasks</label>
+              <span class="color-indicator status-free"></span>
+              <label>Free</label>
             </div>
             <div class="legend-item">
-              <span class="color-indicator status-maintenance"></span>
-              <label>Maintenance Scheduled</label>
+              <span class="color-indicator status-reserved"></span>
+              <label>Reserved</label>
             </div>
             <div class="legend-item">
-              <span class="color-indicator status-inactive"></span>
-              <label>No Activity</label>
+              <span class="color-indicator status-in-progress"></span>
+              <label>In Progress</label>
+            </div>
+            <div class="legend-item">
+              <span class="color-indicator status-completed"></span>
+              <label>Completed</label>
+            </div>
+            <div class="legend-item">
+              <span class="color-indicator status-overdue"></span>
+              <label>Overdue</label>
             </div>
           </div>
         </div>
+
+        <div class="calendar-wrapper">
+          <table class="calendar-table" role="grid" aria-label="Week view calendar">
+            <thead>
+              <tr>
+                <th class="lift-header">Lift</th>
+                <th class="day-header" data-day="0">Monday</th>
+                <th class="day-header" data-day="1">Tuesday</th>
+                <th class="day-header" data-day="2">Wednesday</th>
+                <th class="day-header" data-day="3">Thursday</th>
+                <th class="day-header" data-day="4">Friday</th>
+                <th class="day-header" data-day="5">Saturday</th>
+                <th class="day-header" data-day="6">Sunday</th>
+              </tr>
+            </thead>
+            <tbody id="calendar-body">
+              <!-- Calendar content will be populated here -->
+            </tbody>
+          </table>
+        </div>
       </section>
 
-      <!-- Forms Section -->
-      <section id="forms" class="section" role="region" aria-label="Vehicle entry forms">
-        <h2>Add or Edit Vehicle</h2>
-        <form id="vehicle-form" class="vehicle-form" novalidate>
-          <div class="form-group">
-            <label for="plate">Vehicle Plate <span class="required" aria-label="required">*</span></label>
-            <input 
-              type="text" 
-              id="plate" 
-              name="plate" 
-              placeholder="A000AA00"
-              required
-              aria-required="true"
-              aria-describedby="plate-error plate-hint"
-            >
-            <small id="plate-hint" class="form-hint">Format: A000AA00 (Letter, 3 digits, 2 letters, 2 digits)</small>
-            <span id="plate-error" class="form-error" role="alert"></span>
+      <!-- Export Section -->
+      <section id="export" class="section" role="region" aria-label="Export and Print">
+        <h2>Export & Print</h2>
+        
+        <div class="export-options">
+          <div class="export-card">
+            <h3>Export Orders to CSV</h3>
+            <p>Download all orders as a CSV file for use in spreadsheets</p>
+            <button class="btn btn-primary" id="export-csv-btn">Export CSV</button>
           </div>
 
-          <div class="form-group">
-            <label for="phone">Phone Number <span class="required" aria-label="required">*</span></label>
-            <input 
-              type="tel" 
-              id="phone" 
-              name="phone" 
-              placeholder="+7 (900) 000-00-00"
-              required
-              aria-required="true"
-              aria-describedby="phone-error phone-hint"
-            >
-            <small id="phone-hint" class="form-hint">Format: +7 (XXX) XXX-XX-XX</small>
-            <span id="phone-error" class="form-error" role="alert"></span>
+          <div class="export-card">
+            <h3>Print Order</h3>
+            <p>Select an order to print a formatted order document</p>
+            <div class="form-group">
+              <label for="print-order-select">Select Order:</label>
+              <select id="print-order-select" class="filter-select">
+                <option value="">Select an order to print</option>
+              </select>
+            </div>
+            <button class="btn btn-primary" id="print-order-btn" disabled>Print Order</button>
           </div>
 
-          <div class="form-group">
-            <label for="status">Status <span class="required" aria-label="required">*</span></label>
-            <select id="status" name="status" required aria-required="true" aria-describedby="status-error">
-              <option value="">-- Select Status --</option>
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
-              <option value="maintenance">Maintenance</option>
-            </select>
-            <span id="status-error" class="form-error" role="alert"></span>
+          <div class="export-card">
+            <h3>Export Standalone HTML</h3>
+            <p>Export an order as a standalone HTML file for sharing</p>
+            <div class="form-group">
+              <label for="export-html-select">Select Order:</label>
+              <select id="export-html-select" class="filter-select">
+                <option value="">Select an order to export</option>
+              </select>
+            </div>
+            <button class="btn btn-primary" id="export-html-btn" disabled>Export HTML</button>
           </div>
-
-          <div class="form-group">
-            <label for="workload">Workload Level <span class="required" aria-label="required">*</span></label>
-            <select id="workload" name="workload" required aria-required="true" aria-describedby="workload-error">
-              <option value="">-- Select Workload --</option>
-              <option value="low">Low</option>
-              <option value="medium">Medium</option>
-              <option value="high">High</option>
-            </select>
-            <span id="workload-error" class="form-error" role="alert"></span>
-          </div>
-
-          <div class="form-group">
-            <label for="notes">Notes</label>
-            <textarea id="notes" name="notes" rows="4" aria-describedby="notes-hint"></textarea>
-            <small id="notes-hint" class="form-hint">Optional notes about the vehicle</small>
-          </div>
-
-          <div class="form-actions">
-            <button type="submit" class="btn-primary">Save Vehicle</button>
-            <button type="reset" class="btn-secondary">Clear Form</button>
-          </div>
-        </form>
+        </div>
       </section>
     </main>
+
+    <!-- Client Modal -->
+    <div id="client-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="client-modal-title" hidden>
+      <div class="modal-overlay"></div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="client-modal-title">Add Client</h2>
+          <button class="modal-close" aria-label="Close modal">×</button>
+        </div>
+        <form id="client-form">
+          <div class="form-group">
+            <label for="client-name">Name <span class="required">*</span></label>
+            <input type="text" id="client-name" required aria-required="true">
+            <span class="form-error" role="alert"></span>
+          </div>
+          <div class="form-group">
+            <label for="client-phone">Phone <span class="required">*</span></label>
+            <input type="tel" id="client-phone" required aria-required="true" placeholder="+7 (900) 000-00-00">
+            <span class="form-error" role="alert"></span>
+          </div>
+          <div class="form-group">
+            <label for="client-email">Email</label>
+            <input type="email" id="client-email">
+            <span class="form-error" role="alert"></span>
+          </div>
+          <div class="form-group">
+            <label for="client-address">Address</label>
+            <textarea id="client-address" rows="3"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="client-type">Type</label>
+            <select id="client-type">
+              <option value="individual">Individual</option>
+              <option value="corporate">Corporate</option>
+            </select>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn-secondary" id="client-cancel-btn">Cancel</button>
+            <button type="submit" class="btn-primary">Save Client</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Vehicle Modal -->
+    <div id="vehicle-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="vehicle-modal-title" hidden>
+      <div class="modal-overlay"></div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="vehicle-modal-title">Add Vehicle</h2>
+          <button class="modal-close" aria-label="Close modal">×</button>
+        </div>
+        <form id="vehicle-form">
+          <div class="form-group">
+            <label for="vehicle-client">Client <span class="required">*</span></label>
+            <select id="vehicle-client" required aria-required="true">
+              <option value="">Select Client</option>
+            </select>
+            <span class="form-error" role="alert"></span>
+          </div>
+          <div class="form-group">
+            <label for="vehicle-make">Make <span class="required">*</span></label>
+            <input type="text" id="vehicle-make" required aria-required="true">
+            <span class="form-error" role="alert"></span>
+          </div>
+          <div class="form-group">
+            <label for="vehicle-model">Model <span class="required">*</span></label>
+            <input type="text" id="vehicle-model" required aria-required="true">
+            <span class="form-error" role="alert"></span>
+          </div>
+          <div class="form-group">
+            <label for="vehicle-year">Year <span class="required">*</span></label>
+            <input type="number" id="vehicle-year" min="1900" max="2030" required aria-required="true">
+            <span class="form-error" role="alert"></span>
+          </div>
+          <div class="form-group">
+            <label for="vehicle-license">License Plate <span class="required">*</span></label>
+            <input type="text" id="vehicle-license" required aria-required="true" placeholder="A000AA00">
+            <span class="form-error" role="alert"></span>
+          </div>
+          <div class="form-group">
+            <label for="vehicle-vin">VIN</label>
+            <input type="text" id="vehicle-vin" maxlength="17">
+          </div>
+          <div class="form-group">
+            <label for="vehicle-color">Color</label>
+            <input type="text" id="vehicle-color">
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn-secondary" id="vehicle-cancel-btn">Cancel</button>
+            <button type="submit" class="btn-primary">Save Vehicle</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Service Modal -->
+    <div id="service-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="service-modal-title" hidden>
+      <div class="modal-overlay"></div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="service-modal-title">Add Service</h2>
+          <button class="modal-close" aria-label="Close modal">×</button>
+        </div>
+        <form id="service-form">
+          <div class="form-group">
+            <label for="service-name">Name <span class="required">*</span></label>
+            <input type="text" id="service-name" required aria-required="true">
+            <span class="form-error" role="alert"></span>
+          </div>
+          <div class="form-group">
+            <label for="service-category">Category <span class="required">*</span></label>
+            <select id="service-category" required aria-required="true">
+              <option value="">Select Category</option>
+              <option value="Maintenance">Maintenance</option>
+              <option value="Repair">Repair</option>
+              <option value="Diagnostic">Diagnostic</option>
+              <option value="Detailing">Detailing</option>
+              <option value="Inspection">Inspection</option>
+            </select>
+            <span class="form-error" role="alert"></span>
+          </div>
+          <div class="form-group">
+            <label for="service-price">Price <span class="required">*</span></label>
+            <input type="number" id="service-price" min="0" step="0.01" required aria-required="true">
+            <span class="form-error" role="alert"></span>
+          </div>
+          <div class="form-group">
+            <label for="service-duration">Duration (minutes)</label>
+            <input type="number" id="service-duration" min="0" step="15" value="60">
+          </div>
+          <div class="form-group">
+            <label for="service-description">Description</label>
+            <textarea id="service-description" rows="3"></textarea>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn-secondary" id="service-cancel-btn">Cancel</button>
+            <button type="submit" class="btn-primary">Save Service</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Service Line Item Modal -->
+    <div id="service-line-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="service-line-modal-title" hidden>
+      <div class="modal-overlay"></div>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="service-line-modal-title">Add Service to Order</h2>
+          <button class="modal-close" aria-label="Close modal">×</button>
+        </div>
+        <form id="service-line-form">
+          <div class="form-group">
+            <label for="service-line-service">Service <span class="required">*</span></label>
+            <select id="service-line-service" required aria-required="true">
+              <option value="">Select Service</option>
+            </select>
+            <span class="form-error" role="alert"></span>
+          </div>
+          <div class="form-group">
+            <label for="service-line-quantity">Quantity <span class="required">*</span></label>
+            <input type="number" id="service-line-quantity" min="1" value="1" required aria-required="true">
+          </div>
+          <div class="form-group">
+            <label for="service-line-price">Unit Price</label>
+            <input type="number" id="service-line-price" min="0" step="0.01" readonly>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn-secondary" id="service-line-cancel-btn">Cancel</button>
+            <button type="submit" class="btn-primary">Add to Order</button>
+          </div>
+        </form>
+      </div>
+    </div>
 
     <!-- Settings Modal -->
     <div id="settings-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="settings-title" hidden>
@@ -217,7 +620,7 @@
             </div>
             <div class="setting-item">
               <h4>Reseed Sample Data</h4>
-              <p class="setting-description">Regenerate sample vehicle data for testing.</p>
+              <p class="setting-description">Regenerate sample data for testing.</p>
               <button id="reseed-data-btn" class="btn-secondary">Reseed Data</button>
             </div>
           </div>
@@ -256,13 +659,20 @@
     <div id="notification" class="notification" role="status" aria-live="polite" aria-atomic="true"></div>
   </div>
 
+  <!-- Core Scripts -->
+  <script src="js/storage-manager.js"></script>
   <script src="js/inputMask.js"></script>
   <script src="js/validation.js"></script>
-  <script src="js/storage.js"></script>
-  <script src="js/registry.js"></script>
-  <script src="js/calendar.js"></script>
-  <script src="js/forms.js"></script>
-  <script src="js/settings.js"></script>
+  <script src="js/export.js"></script>
+  <script src="js/print.js"></script>
+  
+  <!-- Module Scripts -->
+  <script src="js/directories.js"></script>
+  <script src="js/order-form.js"></script>
+  <script src="js/orders-registry.js"></script>
+  <script src="js/lift-calendar.js"></script>
+  
+  <!-- Main Application Script -->
   <script src="js/app.js"></script>
 </body>
 </html>
