@@ -1,0 +1,1090 @@
+<!--
+OFFLINE-FIRST HTML SHELL
+========================
+Scope: This is a self-contained, offline-first single-page application.
+- No external CSS/JS dependencies
+- All styles embedded in <style> blocks
+- All functionality embedded in <script> blocks  
+- No CDN links, external fonts, or remote resources
+- Ready for offline deployment and subsequent feature development
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avto Management System</title>
+    <style>
+        /* CSS Variables for theming */
+        :root {
+            /* Colors */
+            --color-primary: #2563eb;
+            --color-primary-hover: #1d4ed8;
+            --color-secondary: #64748b;
+            --color-success: #16a34a;
+            --color-warning: #d97706;
+            --color-error: #dc2626;
+            
+            /* Neutral palette */
+            --color-neutral-50: #f8fafc;
+            --color-neutral-100: #f1f5f9;
+            --color-neutral-200: #e2e8f0;
+            --color-neutral-300: #cbd5e1;
+            --color-neutral-400: #94a3b8;
+            --color-neutral-500: #64748b;
+            --color-neutral-600: #475569;
+            --color-neutral-700: #334155;
+            --color-neutral-800: #1e293b;
+            --color-neutral-900: #0f172a;
+            
+            /* Dark mode overrides */
+            --color-bg-primary: var(--color-neutral-50);
+            --color-bg-secondary: var(--color-neutral-100);
+            --color-bg-tertiary: var(--color-neutral-200);
+            --color-text-primary: var(--color-neutral-900);
+            --color-text-secondary: var(--color-neutral-600);
+            --color-text-tertiary: var(--color-neutral-500);
+            --color-border: var(--color-neutral-300);
+            
+            /* Spacing */
+            --spacing-xs: 0.25rem;
+            --spacing-sm: 0.5rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
+            --spacing-2xl: 3rem;
+            
+            /* Typography */
+            --font-family-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --font-size-xs: 0.75rem;
+            --font-size-sm: 0.875rem;
+            --font-size-base: 1rem;
+            --font-size-lg: 1.125rem;
+            --font-size-xl: 1.25rem;
+            --font-size-2xl: 1.5rem;
+            --font-size-3xl: 1.875rem;
+            
+            /* Layout */
+            --border-radius-sm: 0.25rem;
+            --border-radius-md: 0.5rem;
+            --border-radius-lg: 0.75rem;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        }
+        
+        /* Dark mode */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --color-bg-primary: var(--color-neutral-900);
+                --color-bg-secondary: var(--color-neutral-800);
+                --color-bg-tertiary: var(--color-neutral-700);
+                --color-text-primary: var(--color-neutral-50);
+                --color-text-secondary: var(--color-neutral-300);
+                --color-text-tertiary: var(--color-neutral-400);
+                --color-border: var(--color-neutral-600);
+            }
+        }
+        
+        /* Base styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: var(--font-family-sans);
+            font-size: var(--font-size-base);
+            line-height: 1.6;
+            color: var(--color-text-primary);
+            background-color: var(--color-bg-primary);
+            min-height: 100vh;
+        }
+        
+        /* Layout utilities */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-md);
+        }
+        
+        .flex {
+            display: flex;
+        }
+        
+        .flex-col {
+            flex-direction: column;
+        }
+        
+        .flex-wrap {
+            flex-wrap: wrap;
+        }
+        
+        .items-center {
+            align-items: center;
+        }
+        
+        .justify-between {
+            justify-content: space-between;
+        }
+        
+        .justify-center {
+            justify-content: center;
+        }
+        
+        .gap-sm {
+            gap: var(--spacing-sm);
+        }
+        
+        .gap-md {
+            gap: var(--spacing-md);
+        }
+        
+        .gap-lg {
+            gap: var(--spacing-lg);
+        }
+        
+        .grid {
+            display: grid;
+        }
+        
+        .grid-cols-1 {
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+        }
+        
+        .grid-cols-2 {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        
+        .grid-cols-3 {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+        
+        .grid-cols-4 {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+        
+        /* Navigation */
+        header {
+            background-color: var(--color-bg-secondary);
+            border-bottom: 1px solid var(--color-border);
+            padding: var(--spacing-md) 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: var(--font-size-xl);
+            font-weight: bold;
+            color: var(--color-primary);
+        }
+        
+        nav {
+            display: flex;
+            gap: var(--spacing-sm);
+            flex-wrap: wrap;
+        }
+        
+        .nav-button {
+            padding: var(--spacing-sm) var(--spacing-md);
+            border: none;
+            border-radius: var(--border-radius-md);
+            background-color: transparent;
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+        }
+        
+        .nav-button:hover {
+            background-color: var(--color-bg-tertiary);
+            color: var(--color-text-primary);
+        }
+        
+        .nav-button.active {
+            background-color: var(--color-primary);
+            color: white;
+        }
+        
+        /* Main content */
+        main {
+            padding: var(--spacing-lg) 0;
+            min-height: calc(100vh - 80px);
+        }
+        
+        .section {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Cards */
+        .card {
+            background-color: var(--color-bg-secondary);
+            border-radius: var(--border-radius-lg);
+            padding: var(--spacing-lg);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--color-border);
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .card-header {
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+            margin-bottom: var(--spacing-md);
+            color: var(--color-text-primary);
+        }
+        
+        /* Buttons */
+        .btn {
+            padding: var(--spacing-sm) var(--spacing-md);
+            border: none;
+            border-radius: var(--border-radius-md);
+            cursor: pointer;
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-xs);
+        }
+        
+        .btn-primary {
+            background-color: var(--color-primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--color-primary-hover);
+        }
+        
+        .btn-secondary {
+            background-color: var(--color-bg-tertiary);
+            color: var(--color-text-primary);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--color-border);
+        }
+        
+        .btn-success {
+            background-color: var(--color-success);
+            color: white;
+        }
+        
+        .btn-warning {
+            background-color: var(--color-warning);
+            color: white;
+        }
+        
+        .btn-error {
+            background-color: var(--color-error);
+            color: white;
+        }
+        
+        /* Tables */
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .table th,
+        .table td {
+            padding: var(--spacing-sm) var(--spacing-md);
+            text-align: left;
+            border-bottom: 1px solid var(--color-border);
+        }
+        
+        .table th {
+            background-color: var(--color-bg-tertiary);
+            font-weight: 600;
+            color: var(--color-text-primary);
+        }
+        
+        .table tr:hover {
+            background-color: var(--color-bg-tertiary);
+        }
+        
+        /* Forms */
+        .form-group {
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: var(--spacing-xs);
+            font-weight: 500;
+            color: var(--color-text-primary);
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: var(--spacing-sm) var(--spacing-md);
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius-md);
+            background-color: var(--color-bg-primary);
+            color: var(--color-text-primary);
+            font-size: var(--font-size-sm);
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+        }
+        
+        .form-select {
+            width: 100%;
+            padding: var(--spacing-sm) var(--spacing-md);
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius-md);
+            background-color: var(--color-bg-primary);
+            color: var(--color-text-primary);
+            font-size: var(--font-size-sm);
+        }
+        
+        /* Tabs */
+        .tabs {
+            border-bottom: 1px solid var(--color-border);
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .tab-list {
+            display: flex;
+            gap: var(--spacing-sm);
+        }
+        
+        .tab-button {
+            padding: var(--spacing-sm) var(--spacing-md);
+            border: none;
+            background: none;
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+        
+        .tab-button:hover {
+            color: var(--color-text-primary);
+        }
+        
+        .tab-button.active {
+            color: var(--color-primary);
+            border-bottom-color: var(--color-primary);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background-color: var(--color-bg-secondary);
+            border-radius: var(--border-radius-lg);
+            padding: var(--spacing-lg);
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .modal-title {
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: var(--font-size-xl);
+            cursor: pointer;
+            color: var(--color-text-secondary);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 var(--spacing-sm);
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: var(--spacing-md);
+            }
+            
+            nav {
+                justify-content: center;
+            }
+            
+            .grid-cols-2 {
+                grid-template-columns: 1fr;
+            }
+            
+            .grid-cols-3 {
+                grid-template-columns: 1fr;
+            }
+            
+            .grid-cols-4 {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .nav-button {
+                font-size: var(--font-size-xs);
+                padding: var(--spacing-xs) var(--spacing-sm);
+            }
+            
+            .grid-cols-4 {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Utility classes */
+        .text-center {
+            text-align: center;
+        }
+        
+        .text-right {
+            text-align: right;
+        }
+        
+        .text-sm {
+            font-size: var(--font-size-sm);
+        }
+        
+        .text-lg {
+            font-size: var(--font-size-lg);
+        }
+        
+        .text-xl {
+            font-size: var(--font-size-xl);
+        }
+        
+        .font-bold {
+            font-weight: bold;
+        }
+        
+        .mt-sm { margin-top: var(--spacing-sm); }
+        .mt-md { margin-top: var(--spacing-md); }
+        .mt-lg { margin-top: var(--spacing-lg); }
+        .mb-sm { margin-bottom: var(--spacing-sm); }
+        .mb-md { margin-bottom: var(--spacing-md); }
+        .mb-lg { margin-bottom: var(--spacing-lg); }
+        .p-sm { padding: var(--spacing-sm); }
+        .p-md { padding: var(--spacing-md); }
+        .p-lg { padding: var(--spacing-lg); }
+    </style>
+</head>
+<body>
+    <!-- Header with Navigation -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">Avto Management</div>
+                <nav>
+                    <button class="nav-button active" data-section="directories">Directories</button>
+                    <button class="nav-button" data-section="orders">Order Form</button>
+                    <button class="nav-button" data-section="registry">Registry</button>
+                    <button class="nav-button" data-section="calendar">Calendar</button>
+                    <button class="nav-button" data-section="export">Export/Print</button>
+                    <button class="nav-button" data-section="settings">Settings</button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main>
+        <div class="container">
+            <!-- Directories Section -->
+            <section id="directories" class="section active">
+                <div class="card">
+                    <h2 class="card-header">Directories Management</h2>
+                    <p>Manage your directories and contacts here.</p>
+                    
+                    <div class="grid grid-cols-3 gap-md">
+                        <div class="card">
+                            <h3 class="text-lg font-bold mb-sm">Customers</h3>
+                            <p class="text-sm mb-md">Customer directory and contact information</p>
+                            <button class="btn btn-primary">Manage Customers</button>
+                        </div>
+                        <div class="card">
+                            <h3 class="text-lg font-bold mb-sm">Suppliers</h3>
+                            <p class="text-sm mb-md">Supplier and vendor management</p>
+                            <button class="btn btn-primary">Manage Suppliers</button>
+                        </div>
+                        <div class="card">
+                            <h3 class="text-lg font-bold mb-sm">Services</h3>
+                            <p class="text-sm mb-md">Available services and pricing</p>
+                            <button class="btn btn-primary">Manage Services</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Order Form Section -->
+            <section id="orders" class="section">
+                <div class="card">
+                    <h2 class="card-header">Order Form</h2>
+                    <p>Create and manage customer orders.</p>
+                    
+                    <form>
+                        <div class="grid grid-cols-2 gap-md">
+                            <div class="form-group">
+                                <label class="form-label">Customer Name</label>
+                                <input type="text" class="form-input" placeholder="Enter customer name">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Contact Number</label>
+                                <input type="tel" class="form-input" placeholder="Enter contact number">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Service Type</label>
+                                <select class="form-select">
+                                    <option>Select a service</option>
+                                    <option>Maintenance</option>
+                                    <option>Repair</option>
+                                    <option>Inspection</option>
+                                    <option>Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Date</label>
+                                <input type="date" class="form-input">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Description</label>
+                            <textarea class="form-input" rows="4" placeholder="Enter order details"></textarea>
+                        </div>
+                        
+                        <div class="flex gap-sm">
+                            <button type="submit" class="btn btn-primary">Create Order</button>
+                            <button type="button" class="btn btn-secondary">Save Draft</button>
+                            <button type="button" class="btn btn-secondary">Clear</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Registry Section -->
+            <section id="registry" class="section">
+                <div class="card">
+                    <h2 class="card-header">Registry</h2>
+                    <p>View and manage all records and transactions.</p>
+                    
+                    <div class="tabs">
+                        <div class="tab-list">
+                            <button class="tab-button active" data-tab="orders">Orders</button>
+                            <button class="tab-button" data-tab="payments">Payments</button>
+                            <button class="tab-button" data-tab="inventory">Inventory</button>
+                        </div>
+                    </div>
+                    
+                    <div id="orders" class="tab-content active">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Customer</th>
+                                    <th>Service</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>#001</td>
+                                    <td>John Doe</td>
+                                    <td>Maintenance</td>
+                                    <td>2024-01-15</td>
+                                    <td><span class="btn btn-success">Completed</span></td>
+                                    <td>
+                                        <button class="btn btn-secondary">View</button>
+                                        <button class="btn btn-secondary">Edit</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>#002</td>
+                                    <td>Jane Smith</td>
+                                    <td>Repair</td>
+                                    <td>2024-01-16</td>
+                                    <td><span class="btn btn-warning">In Progress</span></td>
+                                    <td>
+                                        <button class="btn btn-secondary">View</button>
+                                        <button class="btn btn-secondary">Edit</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div id="payments" class="tab-content">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Payment ID</th>
+                                    <th>Order ID</th>
+                                    <th>Amount</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>P001</td>
+                                    <td>#001</td>
+                                    <td>$250.00</td>
+                                    <td>2024-01-15</td>
+                                    <td><span class="btn btn-success">Paid</span></td>
+                                    <td>
+                                        <button class="btn btn-secondary">View</button>
+                                        <button class="btn btn-secondary">Receipt</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div id="inventory" class="tab-content">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Category</th>
+                                    <th>Quantity</th>
+                                    <th>Price</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Oil Filter</td>
+                                    <td>Parts</td>
+                                    <td>25</td>
+                                    <td>$15.00</td>
+                                    <td><span class="btn btn-success">In Stock</span></td>
+                                    <td>
+                                        <button class="btn btn-secondary">Edit</button>
+                                        <button class="btn btn-secondary">Order</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Calendar Section -->
+            <section id="calendar" class="section">
+                <div class="card">
+                    <h2 class="card-header">Calendar</h2>
+                    <p>View and manage appointments and schedules.</p>
+                    
+                    <div class="flex justify-between items-center mb-md">
+                        <h3 class="text-lg font-bold">January 2024</h3>
+                        <div class="flex gap-sm">
+                            <button class="btn btn-secondary">Previous</button>
+                            <button class="btn btn-secondary">Today</button>
+                            <button class="btn btn-secondary">Next</button>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-7 gap-sm">
+                        <div class="text-center font-bold p-sm">Sun</div>
+                        <div class="text-center font-bold p-sm">Mon</div>
+                        <div class="text-center font-bold p-sm">Tue</div>
+                        <div class="text-center font-bold p-sm">Wed</div>
+                        <div class="text-center font-bold p-sm">Thu</div>
+                        <div class="text-center font-bold p-sm">Fri</div>
+                        <div class="text-center font-bold p-sm">Sat</div>
+                        
+                        <!-- Calendar days placeholder -->
+                        <div class="card p-sm text-center">31</div>
+                        <div class="card p-sm text-center">1</div>
+                        <div class="card p-sm text-center">2</div>
+                        <div class="card p-sm text-center">3</div>
+                        <div class="card p-sm text-center">4</div>
+                        <div class="card p-sm text-center">5</div>
+                        <div class="card p-sm text-center">6</div>
+                        <div class="card p-sm text-center">7</div>
+                        <div class="card p-sm text-center">8</div>
+                        <div class="card p-sm text-center">9</div>
+                        <div class="card p-sm text-center">10</div>
+                        <div class="card p-sm text-center">11</div>
+                        <div class="card p-sm text-center">12</div>
+                        <div class="card p-sm text-center">13</div>
+                        <div class="card p-sm text-center">14</div>
+                        <div class="card p-sm text-center bg-primary text-white">15</div>
+                        <div class="card p-sm text-center">16</div>
+                        <div class="card p-sm text-center">17</div>
+                        <div class="card p-sm text-center">18</div>
+                        <div class="card p-sm text-center">19</div>
+                        <div class="card p-sm text-center">20</div>
+                    </div>
+                    
+                    <div class="mt-lg">
+                        <h3 class="text-lg font-bold mb-md">Upcoming Appointments</h3>
+                        <div class="card">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h4 class="font-bold">John Doe - Maintenance</h4>
+                                    <p class="text-sm">January 15, 2024 at 10:00 AM</p>
+                                </div>
+                                <div class="flex gap-sm">
+                                    <button class="btn btn-secondary">Edit</button>
+                                    <button class="btn btn-error">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Export/Print Section -->
+            <section id="export" class="section">
+                <div class="card">
+                    <h2 class="card-header">Export & Print</h2>
+                    <p>Generate reports and export data.</p>
+                    
+                    <div class="grid grid-cols-2 gap-md">
+                        <div class="card">
+                            <h3 class="text-lg font-bold mb-md">Reports</h3>
+                            <div class="space-y-sm">
+                                <button class="btn btn-secondary" style="width: 100%; justify-content: flex-start;">
+                                    📊 Sales Report
+                                </button>
+                                <button class="btn btn-secondary" style="width: 100%; justify-content: flex-start;">
+                                    👥 Customer Report
+                                </button>
+                                <button class="btn btn-secondary" style="width: 100%; justify-content: flex-start;">
+                                    📦 Inventory Report
+                                </button>
+                                <button class="btn btn-secondary" style="width: 100%; justify-content: flex-start;">
+                                    💰 Financial Report
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <h3 class="text-lg font-bold mb-md">Export Options</h3>
+                            <div class="form-group">
+                                <label class="form-label">Date Range</label>
+                                <div class="grid grid-cols-2 gap-sm">
+                                    <input type="date" class="form-input">
+                                    <input type="date" class="form-input">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Format</label>
+                                <select class="form-select">
+                                    <option>PDF</option>
+                                    <option>Excel</option>
+                                    <option>CSV</option>
+                                    <option>JSON</option>
+                                </select>
+                            </div>
+                            <button class="btn btn-primary" style="width: 100%;">Generate Export</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="settings" class="section">
+                <div class="card">
+                    <h2 class="card-header">Settings</h2>
+                    <p>Configure application settings and preferences.</p>
+                    
+                    <div class="tabs">
+                        <div class="tab-list">
+                            <button class="tab-button active" data-tab="general">General</button>
+                            <button class="tab-button" data-tab="appearance">Appearance</button>
+                            <button class="tab-button" data-tab="notifications">Notifications</button>
+                            <button class="tab-button" data-tab="backup">Backup</button>
+                        </div>
+                    </div>
+                    
+                    <div id="general" class="tab-content active">
+                        <div class="form-group">
+                            <label class="form-label">Business Name</label>
+                            <input type="text" class="form-input" value="Avto Management System">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Contact Email</label>
+                            <input type="email" class="form-input" value="contact@avto.com">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Phone Number</label>
+                            <input type="tel" class="form-input" value="+1 (555) 123-4567">
+                        </div>
+                        <button class="btn btn-primary">Save Changes</button>
+                    </div>
+                    
+                    <div id="appearance" class="tab-content">
+                        <div class="form-group">
+                            <label class="form-label">Theme</label>
+                            <select class="form-select">
+                                <option>Light</option>
+                                <option>Dark</option>
+                                <option>System</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Language</label>
+                            <select class="form-select">
+                                <option>English</option>
+                                <option>Spanish</option>
+                                <option>French</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary">Save Changes</button>
+                    </div>
+                    
+                    <div id="notifications" class="tab-content">
+                        <div class="form-group">
+                            <label class="form-label">
+                                <input type="checkbox" checked> Email Notifications
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">
+                                <input type="checkbox" checked> Appointment Reminders
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">
+                                <input type="checkbox"> Low Inventory Alerts
+                            </label>
+                        </div>
+                        <button class="btn btn-primary">Save Changes</button>
+                    </div>
+                    
+                    <div id="backup" class="tab-content">
+                        <div class="card">
+                            <h3 class="text-lg font-bold mb-md">Backup Information</h3>
+                            <p class="mb-md">Last backup: January 15, 2024 at 2:30 PM</p>
+                            <div class="flex gap-sm">
+                                <button class="btn btn-primary">Backup Now</button>
+                                <button class="btn btn-secondary">Schedule Backup</button>
+                                <button class="btn btn-secondary">Restore</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Modal Template -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Modal Title</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Modal content goes here.</p>
+            </div>
+            <div class="modal-footer flex gap-sm justify-end mt-md">
+                <button class="btn btn-secondary modal-cancel">Cancel</button>
+                <button class="btn btn-primary modal-confirm">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Navigation logic
+        document.addEventListener('DOMContentLoaded', function() {
+            // Navigation between main sections
+            const navButtons = document.querySelectorAll('.nav-button');
+            const sections = document.querySelectorAll('.section');
+            
+            navButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetSection = this.getAttribute('data-section');
+                    
+                    // Update active states
+                    navButtons.forEach(btn => btn.classList.remove('active'));
+                    sections.forEach(section => section.classList.remove('active'));
+                    
+                    this.classList.add('active');
+                    document.getElementById(targetSection).classList.add('active');
+                });
+            });
+            
+            // Tab functionality within sections
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetTab = this.getAttribute('data-tab');
+                    const parentSection = this.closest('.section');
+                    
+                    // Update active states within the same section
+                    parentSection.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                    parentSection.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                    
+                    this.classList.add('active');
+                    const targetContent = parentSection.querySelector(`#${targetTab}`);
+                    if (targetContent) {
+                        targetContent.classList.add('active');
+                    }
+                });
+            });
+            
+            // Modal functionality
+            const modal = document.getElementById('modal');
+            const modalClose = document.querySelector('.modal-close');
+            const modalCancel = document.querySelector('.modal-cancel');
+            
+            function openModal(title, content) {
+                const modalTitle = modal.querySelector('.modal-title');
+                const modalBody = modal.querySelector('.modal-body');
+                
+                modalTitle.textContent = title;
+                modalBody.innerHTML = content;
+                modal.classList.add('active');
+            }
+            
+            function closeModal() {
+                modal.classList.remove('active');
+            }
+            
+            modalClose.addEventListener('click', closeModal);
+            modalCancel.addEventListener('click', closeModal);
+            
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+            
+            // Form handling
+            const forms = document.querySelectorAll('form');
+            forms.forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    // Simple form validation
+                    const inputs = this.querySelectorAll('input[required], select[required], textarea[required]');
+                    let isValid = true;
+                    
+                    inputs.forEach(input => {
+                        if (!input.value.trim()) {
+                            input.style.borderColor = 'var(--color-error)';
+                            isValid = false;
+                        } else {
+                            input.style.borderColor = '';
+                        }
+                    });
+                    
+                    if (isValid) {
+                        // Show success modal
+                        openModal('Success', '<p>Form submitted successfully!</p>');
+                        this.reset();
+                    } else {
+                        // Show error modal
+                        openModal('Error', '<p>Please fill in all required fields.</p>');
+                    }
+                });
+            });
+            
+            // Button click handlers for demo purposes
+            const demoButtons = document.querySelectorAll('.btn');
+            demoButtons.forEach(button => {
+                if (!button.form && !button.classList.contains('modal-cancel') && 
+                    !button.classList.contains('modal-close') && !button.classList.contains('modal-confirm')) {
+                    button.addEventListener('click', function(e) {
+                        if (!this.closest('nav') && !this.classList.contains('tab-button')) {
+                            e.preventDefault();
+                            const buttonText = this.textContent.trim();
+                            openModal('Action', `<p>You clicked: <strong>${buttonText}</strong></p><p>This is a demo action.</p>`);
+                        }
+                    });
+                }
+            });
+            
+            // Calendar navigation (demo)
+            const calendarButtons = document.querySelectorAll('#calendar .btn');
+            calendarButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const monthYear = document.querySelector('#calendar .text-lg');
+                    if (this.textContent === 'Previous') {
+                        monthYear.textContent = 'December 2023';
+                    } else if (this.textContent === 'Next') {
+                        monthYear.textContent = 'February 2024';
+                    } else if (this.textContent === 'Today') {
+                        monthYear.textContent = 'January 2024';
+                    }
+                });
+            });
+            
+            // Settings save handlers
+            const settingsSaveButtons = document.querySelectorAll('#settings .btn-primary');
+            settingsSaveButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    openModal('Settings Saved', '<p>Your settings have been saved successfully!</p>');
+                });
+            });
+            
+            // Initialize with console log
+            console.log('Avto Management System initialized successfully');
+            console.log('All sections are ready for development');
+        });
+    </script>
+</body>
+</html>
