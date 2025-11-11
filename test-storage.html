@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Storage Manager Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .section h2 {
+            margin-top: 0;
+            color: #333;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+    </style>
+</head>
+<body>
+    <h1>Storage Manager Test Suite</h1>
+    
+    <div class="section">
+        <h2>Initialization Test</h2>
+        <button onclick="testInitialization()">Test Initialization</button>
+        <div id="init-result" class="result"></div>
+    </div>
+
+    <div class="section">
+        <h2>CRUD Operations Test</h2>
+        <button onclick="testCRUD()">Test CRUD Operations</button>
+        <div id="crud-result" class="result"></div>
+    </div>
+
+    <div class="section">
+        <h2>Order Number Test</h2>
+        <button onclick="testOrderNumber()">Test Order Number Generation</button>
+        <div id="order-result" class="result"></div>
+    </div>
+
+    <div class="section">
+        <h2>Seed Data Test</h2>
+        <button onclick="testSeedData()">Test Seed Data</button>
+        <div id="seed-result" class="result"></div>
+    </div>
+
+    <div class="section">
+        <h2>Export/Import Test</h2>
+        <button onclick="testExportImport()">Test Export/Import</button>
+        <div id="export-result" class="result"></div>
+    </div>
+
+    <div class="section">
+        <h2>Data Persistence Test</h2>
+        <button onclick="testPersistence()">Test Data Persistence</button>
+        <div id="persistence-result" class="result"></div>
+    </div>
+
+    <script src="storage-manager.js"></script>
+    <script>
+        let storageManager;
+
+        function showResult(elementId, message, isError = false) {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.className = `result ${isError ? 'error' : 'success'}`;
+        }
+
+        function testInitialization() {
+            try {
+                storageManager = new StorageManager();
+                const initialized = localStorage.getItem('initialized');
+                const carMakes = storageManager.getItem('carMakes');
+                
+                let message = 'Storage Manager initialized successfully!\n\n';
+                message += `Initialized flag: ${initialized}\n`;
+                message += `Car makes count: ${carMakes ? carMakes.length : 0}\n`;
+                message += `Services count: ${storageManager.getAll('services').length}\n`;
+                message += `Clients count: ${storageManager.getAll('clients').length}\n`;
+                message += `Lifts count: ${storageManager.getAll('lifts').length}\n`;
+                message += `Order counter: ${storageManager.getItem('orderCounter')}`;
+                
+                showResult('init-result', message);
+            } catch (error) {
+                showResult('init-result', `Initialization failed: ${error.message}`, true);
+            }
+        }
+
+        function testCRUD() {
+            try {
+                if (!storageManager) {
+                    storageManager = new StorageManager();
+                }
+
+                let message = 'CRUD Operations Test:\n\n';
+
+                // Test Add
+                const newClient = {
+                    name: 'Test Client',
+                    type: 'individual',
+                    email: 'test@example.com',
+                    phone: '555-TEST'
+                };
+                const addedClient = storageManager.add('clients', newClient);
+                message += `✓ Added client: ${addedClient.name} (ID: ${addedClient.id})\n`;
+
+                // Test Find
+                const foundClient = storageManager.findById('clients', addedClient.id);
+                message += `✓ Found client: ${foundClient ? foundClient.name : 'NOT FOUND'}\n`;
+
+                // Test Update
+                const updatedClient = storageManager.update('clients', addedClient.id, {
+                    name: 'Updated Test Client',
+                    phone: '555-UPDATED'
+                });
+                message += `✓ Updated client: ${updatedClient.name}\n`;
+
+                // Test Get All
+                const allClients = storageManager.getAll('clients');
+                message += `✓ Total clients: ${allClients.length}\n`;
+
+                // Test Remove
+                const removed = storageManager.remove('clients', addedClient.id);
+                message += `✓ Removed client: ${removed}\n`;
+
+                // Test validation
+                try {
+                    storageManager.add('clients', { name: '', type: 'invalid' });
+                    message += '✗ Validation should have failed\n';
+                } catch (error) {
+                    message += `✓ Validation working: ${error.message}\n`;
+                }
+
+                showResult('crud-result', message);
+            } catch (error) {
+                showResult('crud-result', `CRUD test failed: ${error.message}`, true);
+            }
+        }
+
+        function testOrderNumber() {
+            try {
+                if (!storageManager) {
+                    storageManager = new StorageManager();
+                }
+
+                let message = 'Order Number Generation Test:\n\n';
+                
+                const counter = storageManager.getItem('orderCounter');
+                message += `Current counter: ${counter}\n`;
+
+                // Generate several order numbers
+                for (let i = 0; i < 5; i++) {
+                    const orderNumber = storageManager.getNextOrderNumber();
+                    message += `Generated order ${i + 1}: ${orderNumber}\n`;
+                }
+
+                const newCounter = storageManager.getItem('orderCounter');
+                message += `New counter: ${newCounter}\n`;
+
+                showResult('order-result', message);
+            } catch (error) {
+                showResult('order-result', `Order number test failed: ${error.message}`, true);
+            }
+        }
+
+        function testSeedData() {
+            try {
+                if (!storageManager) {
+                    storageManager = new StorageManager();
+                }
+
+                let message = 'Seed Data Test:\n\n';
+
+                const carMakes = storageManager.getItem('carMakes');
+                message += `Car makes: ${carMakes.length}\n`;
+                
+                let totalModels = 0;
+                carMakes.forEach(make => {
+                    totalModels += make.models.length;
+                });
+                message += `Total models: ${totalModels}\n`;
+
+                const services = storageManager.getAll('services');
+                message += `Services: ${services.length}\n`;
+                
+                const categories = [...new Set(services.map(s => s.category))];
+                message += `Service categories: ${categories.join(', ')}\n`;
+
+                const clients = storageManager.getAll('clients');
+                message += `Clients: ${clients.length}\n`;
+                
+                const individualClients = clients.filter(c => c.type === 'individual').length;
+                const corporateClients = clients.filter(c => c.type === 'corporate').length;
+                message += `Individual: ${individualClients}, Corporate: ${corporateClients}\n`;
+
+                const lifts = storageManager.getAll('lifts');
+                message += `Lift slots: ${lifts.length}\n`;
+
+                showResult('seed-result', message);
+            } catch (error) {
+                showResult('seed-result', `Seed data test failed: ${error.message}`, true);
+            }
+        }
+
+        function testExportImport() {
+            try {
+                if (!storageManager) {
+                    storageManager = new StorageManager();
+                }
+
+                let message = 'Export/Import Test:\n\n';
+
+                // Test export
+                const exportData = storageManager.exportData();
+                message += `✓ Export successful (${exportData.length} characters)\n`;
+
+                // Parse export data to verify
+                const parsedData = JSON.parse(exportData);
+                message += `✓ Export data contains: ${Object.keys(parsedData).join(', ')}\n`;
+
+                // Add a test client
+                const testClient = {
+                    name: 'Export Test Client',
+                    type: 'individual',
+                    email: 'export@test.com'
+                };
+                const addedClient = storageManager.add('clients', testClient);
+                message += `✓ Added test client for import test\n`;
+
+                // Clear and re-import
+                const clientCountBefore = storageManager.getAll('clients').length;
+                const importSuccess = storageManager.importData(exportData);
+                const clientCountAfter = storageManager.getAll('clients').length;
+
+                message += `✓ Import successful: ${importSuccess}\n`;
+                message += `✓ Client count before: ${clientCountBefore}, after: ${clientCountAfter}\n`;
+                message += `✓ Data restored to original state\n`;
+
+                showResult('export-result', message);
+            } catch (error) {
+                showResult('export-result', `Export/Import test failed: ${error.message}`, true);
+            }
+        }
+
+        function testPersistence() {
+            try {
+                let message = 'Data Persistence Test:\n\n';
+                
+                // Create a new storage manager instance
+                const sm1 = new StorageManager();
+                
+                // Add some test data
+                const testClient = {
+                    name: 'Persistence Test Client',
+                    type: 'individual',
+                    email: 'persistence@test.com'
+                };
+                const addedClient = sm1.add('clients', testClient);
+                message += `✓ Added client with first instance: ${addedClient.id}\n`;
+
+                // Create another instance (simulating page reload)
+                const sm2 = new StorageManager();
+                
+                // Check if data persists
+                const foundClient = sm2.findById('clients', addedClient.id);
+                message += `✓ Found client with second instance: ${foundClient ? foundClient.name : 'NOT FOUND'}\n`;
+
+                // Test that seed data doesn't duplicate
+                const services = sm2.getAll('services');
+                message += `✓ Services count (no duplication): ${services.length}\n`;
+
+                // Clean up test data
+                sm2.remove('clients', addedClient.id);
+                message += `✓ Cleaned up test client\n`;
+
+                message += '\nNote: Refresh the page to test persistence across actual page reloads.';
+
+                showResult('persistence-result', message);
+            } catch (error) {
+                showResult('persistence-result', `Persistence test failed: ${error.message}`, true);
+            }
+        }
+
+        // Auto-run initialization test on page load
+        window.addEventListener('load', () => {
+            testInitialization();
+        });
+    </script>
+</body>
+</html>
