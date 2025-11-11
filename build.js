@@ -9,13 +9,12 @@ const htmlPath = path.join(rootDir, 'index.html');
 const cssPath = path.join(rootDir, 'styles.css');
 
 const scriptOrder = [
-  'js/inputMask.js',
-  'js/validation.js',
-  'js/storage.js',
-  'js/registry.js',
-  'js/calendar.js',
-  'js/forms.js',
-  'js/settings.js',
+  'js/storage-manager.js',
+  'js/directories-module.js',
+  'js/order-form-module.js',
+  'js/orders-registry-module.js',
+  'js/lift-calendar-module.js',
+  'js/export-module.js',
   'js/app.js'
 ];
 
