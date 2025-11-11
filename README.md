@@ -45,19 +45,23 @@ A fully functional web application for managing vehicle registries and calendars
 ```
 /
 ├── index.html           # Main HTML document
-├── styles.css          # Styling with accessibility features
-├── package.json        # Project metadata
-├── README.md           # This file
-├── .gitignore         # Git ignore rules
+├── styles.css           # Styling with accessibility features
+├── build.js             # Bundles CSS and JS into a single HTML file for deployment
+├── package.json         # Project metadata
+├── README.md            # This file
+├── .gitignore           # Git ignore rules
+├── .github/
+│   └── workflows/
+│       └── deploy-pages.yml   # GitHub Pages deployment workflow
 └── js/
-    ├── app.js         # Main application initialization and QA utilities
-    ├── inputMask.js   # Input mask implementation for phone and plates
-    ├── validation.js  # Form validation helpers
-    ├── storage.js     # LocalStorage management and data seeding
-    ├── registry.js    # Vehicle registry display and filtering
-    ├── calendar.js    # Calendar view with vehicle scheduling
-    ├── forms.js       # Form handling and submission
-    └── settings.js    # Settings panel and data management
+    ├── app.js          # Main application initialization and QA utilities
+    ├── inputMask.js    # Input mask implementation for phone and plates
+    ├── validation.js   # Form validation helpers
+    ├── storage.js      # LocalStorage management and data seeding
+    ├── registry.js     # Vehicle registry display and filtering
+    ├── calendar.js     # Calendar view with vehicle scheduling
+    ├── forms.js        # Form handling and submission
+    └── settings.js     # Settings panel and data management
 ```
 
 ## Module Architecture
@@ -150,6 +154,19 @@ Then open http://localhost:8000 in your browser.
 - Click the ⚙️ button in the header
 - **Clear Storage**: Remove all data and reset to factory state
 - **Reseed Data**: Restore sample data for testing
+
+## Deployment
+
+### Create the single-file bundle
+
+- Run `npm run build` to generate `dist/index.html` with all CSS and JavaScript inlined.
+- The generated file can be opened directly from the filesystem and works without an internet connection.
+
+### GitHub Pages
+
+- The `deploy-pages.yml` workflow builds the bundle and publishes it to GitHub Pages on every push to `main`.
+- Once enabled in the repository settings, the application is available at https://panfilov91.github.io/avto/.
+- The deployed HTML bundle is fully self-contained and relies solely on `localStorage`, ensuring offline functionality after the first load.
 
 ## Accessibility Features
 
