@@ -1,249 +1,319 @@
-# Vehicle Registry & Calendar Management Application
+# Avto Management System - Complete Application
 
-A fully functional web application for managing vehicle registries and calendars with comprehensive form validation, input masking, and accessibility features.
+A comprehensive web application for managing vehicle service operations, including client and vehicle directories, order management, lift scheduling, and export capabilities.
 
-## Features
+## 🚀 Features
 
-### 1. Input Masks (Objective 1)
-- **Phone Number Mask**: Enforces +7 (XXX) XXX-XX-XX format
-- **Vehicle Plate Mask**: Enforces A000AA00 format (Letter, 3 digits, 2 letters, 2 digits)
-- Real-time formatting as users type
-- Automatic validation of masked formats
+### 1. **Directories Management**
+- **Clients Directory**: Add, edit, delete, and search client records (individual and corporate)
+- **Vehicles Directory**: Manage vehicle information linked to clients with full CRUD operations
+- **Services Catalog**: Maintain service offerings with categories, prices, and durations
+- Real-time search and filtering
+- Type-based filtering (corporate vs individual clients)
 
-### 2. Form Validation (Objective 2)
-- **Required Field Validation**: Ensures all mandatory fields are filled
-- **Format Validation**: Phone and plate format validation with clear error messages
-- **Contextual Error Messaging**: Field-specific error messages guide user correction
-- **Global Validation Helpers**: Reusable validation functions for common patterns
-- **Real-time Feedback**: Errors clear automatically when field is corrected
+### 2. **Order Form (Order-Narad)**
+- Create comprehensive service orders with multiple line items
+- Client and vehicle selection with automatic filtering
+- Service catalog integration
+- Automatic calculations:
+  - Subtotal
+  - Discount (percentage-based)
+  - VAT (20%)
+  - Grand total
+- Lift assignment
+- Scheduled date selection
+- Order notes
 
-### 3. Accessibility & UI Polish (Objective 3)
-- **WCAG AA Compliant Color Palette**:
-  - Status colors: Active (Green #2e8555), Inactive (Gray #5a6c7d), Maintenance (Orange #c26200)
-  - Error color: Red (#c5192d) - high contrast against white
-  - All text meets 4.5:1 minimum contrast ratio
-- **Semantic HTML**: Proper use of ARIA labels, roles, and landmarks
-- **Keyboard Navigation**: Full keyboard support including Tab, Enter, Escape, Arrow keys
-- **Focus Management**: Visible focus indicators and modal focus trapping
-- **Legends**: Status and workload legends with color indicators in registry and calendar
+### 3. **Orders Registry**
+- Display all orders in a filterable table
+- Summary statistics dashboard:
+  - Total orders
+  - Pending orders
+  - In-progress orders
+  - Completed orders
+  - Total revenue
+- Search by order number or client name
+- Date range filtering
+- Status filtering (draft, scheduled, in-progress, completed)
+- Client and lift filtering
+- Sort by order number, date, or total
+- View and delete orders
 
-### 4. Settings Panel (Objective 4)
-- **Clear Local Storage**: Removes all saved data with user confirmation
-- **Reseed Sample Data**: Regenerates initial sample data for testing
-- **Confirmation Dialogs**: User confirmation required before destructive actions
-- **Non-Modal Accessibility**: Settings accessible from header button
+### 4. **Lift Scheduling Calendar**
+- Week-view calendar showing lift availability
+- 4 lifts tracked simultaneously
+- Visual order markers on scheduled dates
+- Week navigation (previous/next)
+- Status-based color coding
+- Lift filtering
 
-### 5. QA Compliance (Objective 5)
-- **Offline Operation**: All data stored in localStorage, no external API calls
-- **Accessibility Audit**: Labels, focus order, keyboard navigation, ARIA attributes
-- **Module Interoperability**: All modules work together seamlessly
-- **Console Clean**: No errors or warnings in browser console
-- **No External Requests**: Fully self-contained application
+### 5. **Export & Print**
+- **CSV Export**: Export all orders to spreadsheet-compatible format
+- **Print Orders**: Generate print-ready order documents with full details
+- **HTML Export**: Create standalone HTML files for sharing orders
 
-## Project Structure
+### 6. **Data Management**
+- Comprehensive localStorage-backed storage
+- Automatic data persistence
+- Sample data seeding
+- Clear storage and reseed options in settings
+
+## 📋 Project Structure
 
 ```
 /
-├── index.html           # Main HTML document
-├── styles.css           # Styling with accessibility features
-├── build.js             # Bundles CSS and JS into a single HTML file for deployment
-├── package.json         # Project metadata
-├── README.md            # This file
-├── .gitignore           # Git ignore rules
+├── index.html                      # Main application HTML
+├── styles.css                      # Complete styling with accessibility
+├── build.js                        # Single-file bundler for deployment
+├── package.json                    # Project metadata
+├── README.md                       # This file
+├── .gitignore                      # Git ignore rules
 ├── .github/
-│   └── workflows/
-│       └── deploy-pages.yml   # GitHub Pages deployment workflow
+│   ├── workflows/
+│   │   ├── deploy.yml              # Main deployment workflow
+│   │   ├── deploy-pages.yml        # GitHub Pages deployment
+│   │   └── auto-merge.yml          # Auto-merge workflow
+│   └── WORKFLOWS.md                # Workflow documentation
 └── js/
-    ├── app.js          # Main application initialization and QA utilities
-    ├── inputMask.js    # Input mask implementation for phone and plates
-    ├── validation.js   # Form validation helpers
-    ├── storage.js      # LocalStorage management and data seeding
-    ├── registry.js     # Vehicle registry display and filtering
-    ├── calendar.js     # Calendar view with vehicle scheduling
-    ├── forms.js        # Form handling and submission
-    └── settings.js     # Settings panel and data management
+    ├── app.js                      # Main application coordinator
+    ├── storage-manager.js          # Comprehensive storage layer
+    ├── directories-module.js       # Directories CRUD module
+    ├── order-form-module.js        # Order creation module
+    ├── orders-registry-module.js   # Orders display and filtering
+    ├── lift-calendar-module.js     # Calendar scheduling
+    └── export-module.js            # Export and print functionality
 ```
 
-## Module Architecture
+## 🏗️ Architecture
 
-### Storage Module
-- LocalStorage wrapper for offline data persistence
-- Sample data seeding on first run
-- Search and filter capabilities
-- CRUD operations for vehicles
+### Storage Layer
+The `StorageManager` provides a comprehensive data management system:
+- **Entities**: Clients, Vehicles, Services, Orders, Lifts
+- **Operations**: CRUD operations for all entities
+- **Persistence**: localStorage-backed with automatic initialization
+- **Data Integrity**: UUID-based IDs, timestamps, relationships
+- **Seeding**: Automatic sample data generation
 
-### InputMask Module
-- Phone number masking: +7 (XXX) XXX-XX-XX
-- Vehicle plate masking: A000AA00
-- Format validation functions
-- Raw data extraction utilities
+### Module System
+Each functional area is encapsulated in its own module:
 
-### Validation Module
-- Required field validation
-- Phone and plate format validation
-- Numeric range validation
-- Form-wide validation with error collection
-- Error display and clearing
+1. **Directories Module**: Manages clients, vehicles, and services with modal-based forms
+2. **Order Form Module**: Handles order creation with service selection and calculations
+3. **Orders Registry Module**: Displays and filters orders with summary statistics
+4. **Lift Calendar Module**: Visualizes lift scheduling across a week view
+5. **Export Module**: Provides data export and printing capabilities
 
-### Registry Module
-- Display vehicles in filterable table
-- Search by plate or phone
-- Filter by status and workload
-- Edit and delete functionality
-- Real-time updates
+### Navigation
+- **Main Navigation**: Switch between major sections (Directories, New Order, Orders Registry, Calendar, Export)
+- **Sub Navigation**: Within Directories, switch between Clients, Vehicles, and Services tabs
+- **Modal System**: Consistent modal dialogs for forms and confirmations
 
-### Calendar Module
-- Monthly calendar view
-- Vehicle event indicators
-- Month navigation
-- Status-based color coding
-- Keyboard accessible
+## 🎨 Design Features
 
-### Forms Module
-- Vehicle entry form
-- Input mask application
-- Validation integration
-- Submit and reset handling
-- Edit mode support
+### Accessibility
+- **WCAG AA Compliant**: All colors meet 4.5:1 contrast ratio
+- **Semantic HTML**: Proper ARIA labels, roles, and landmarks
+- **Keyboard Navigation**: Full keyboard support throughout
+- **Focus Management**: Visible focus indicators and modal focus trapping
+- **Screen Reader Support**: Descriptive labels and live regions
 
-### Settings Module
-- Settings modal dialog
-- Data management options
-- Confirmation dialogs
-- Modal accessibility
+### Responsive Design
+- Grid-based layouts that adapt to screen size
+- Mobile-friendly forms and tables
+- Responsive navigation
+- Touch-friendly controls
 
-## Usage
+### Visual Design
+- Clean, modern interface
+- Consistent color scheme with semantic status colors
+- Card-based layouts for directories
+- Badge indicators for status and categories
+- Smooth transitions and hover states
 
-### Starting the Application
+## 🔧 Data Schemas
 
-```bash
-# Using Python's built-in server
-python3 -m http.server 8000
-
-# Or use npm start
-npm start
+### Client
+```javascript
+{
+  id: string (uuid),
+  name: string,
+  type: 'individual' | 'corporate',
+  email: string,
+  phone: string,
+  address: string,
+  createdAt: string (ISO),
+  updatedAt: string (ISO)
+}
 ```
 
-Then open http://localhost:8000 in your browser.
+### Vehicle
+```javascript
+{
+  id: string (uuid),
+  clientId: string,
+  make: string,
+  model: string,
+  year: number,
+  licensePlate: string,
+  vin: string,
+  color: string,
+  createdAt: string (ISO),
+  updatedAt: string (ISO)
+}
+```
 
-### Adding a Vehicle
+### Service
+```javascript
+{
+  id: string (uuid),
+  name: string,
+  category: string,
+  description: string,
+  basePrice: number,
+  duration: number (minutes),
+  isActive: boolean,
+  createdAt: string (ISO),
+  updatedAt: string (ISO)
+}
+```
 
-1. Navigate to the "Forms" tab
-2. Fill in the vehicle plate (format: A000AA00)
-3. Enter phone number (format: +7 (XXX) XXX-XX-XX)
-4. Select status and workload levels
-5. Add optional notes
-6. Click "Save Vehicle"
+### Order
+```javascript
+{
+  id: string (uuid),
+  orderNumber: string,
+  clientId: string,
+  vehicleId: string,
+  serviceIds: array,
+  lineItems: array,
+  status: 'draft' | 'scheduled' | 'in-progress' | 'completed',
+  scheduledDate: string (ISO),
+  liftReference: string,
+  subtotal: number,
+  discount: number,
+  vat: number,
+  totalAmount: number,
+  notes: string,
+  createdAt: string (ISO),
+  updatedAt: string (ISO)
+}
+```
 
-### Managing Vehicles
-
-- **Registry Tab**: View all vehicles in a sortable table
-- **Search**: Search by plate, phone, or notes
-- **Filter**: Filter by status or workload
-- **Edit**: Click "Edit" to modify a vehicle
-- **Delete**: Click "Delete" to remove a vehicle
-
-### Calendar View
-
-- Navigate between months using Previous/Next buttons
-- Days with vehicles show color-coded indicators
-- Click on any day to see vehicle details
-
-### Settings
-
-- Click the ⚙️ button in the header
-- **Clear Storage**: Remove all data and reset to factory state
-- **Reseed Data**: Restore sample data for testing
-
-## Deployment
-
-### Create the single-file bundle
-
-- Run `npm run build` to generate `dist/index.html` with all CSS and JavaScript inlined.
-- The generated file can be opened directly from the filesystem and works without an internet connection.
+## 🚀 Deployment
 
 ### GitHub Pages
+The application is configured for automatic deployment to GitHub Pages:
+1. Push to `main` branch triggers deployment workflow
+2. `build.js` bundles everything into a single HTML file
+3. Deployed to GitHub Pages automatically
+4. Accessible at your GitHub Pages URL
 
-- The `deploy-pages.yml` workflow builds the bundle and publishes it to GitHub Pages on every push to `main`.
-- Once enabled in the repository settings, the application is available at https://panfilov91.github.io/avto/.
-- The deployed HTML bundle is fully self-contained and relies solely on `localStorage`, ensuring offline functionality after the first load.
-
-## Accessibility Features
-
-- **Skip Link**: Jump to main content
-- **Semantic HTML**: Proper heading hierarchy, landmarks, and roles
-- **ARIA Labels**: All interactive elements have descriptive labels
-- **Keyboard Navigation**: Tab through controls, Enter/Space to activate
-- **Focus Management**: Modal dialogs trap focus and return it when closed
-- **Color Contrast**: All text meets WCAG AA standards (4.5:1 ratio)
-- **Error Messages**: Clear, contextual error messages for form validation
-- **Form Hints**: Helpful hints below form fields
-- **Reduced Motion**: Respects prefers-reduced-motion preference
-
-## Color Palette (WCAG AA Compliant)
-
-| Color | Purpose | Hex | Contrast |
-|-------|---------|-----|----------|
-| Primary | Links, buttons | #0052cc | 9.0:1 |
-| Active | Green status/indicator | #2e8555 | 4.8:1 |
-| Inactive | Gray status/indicator | #5a6c7d | 5.2:1 |
-| Maintenance | Orange status/indicator | #c26200 | 4.5:1 |
-| Error | Red alerts/errors | #c5192d | 4.9:1 |
-
-## Offline Operation
-
-The application is fully functional offline:
-- All data is stored in browser's localStorage
-- No external API calls or network requests
-- Works without internet connection
-- Data persists across browser sessions
-
-## QA Checklist
-
-- ✅ Input masks enforce formats while allowing correction
-- ✅ Validation feedback is consistent and blocks invalid submissions
-- ✅ Color indicators and legends are accessible with proper contrast
-- ✅ Data reset workflow includes user confirmation
-- ✅ Application runs without console errors
-- ✅ No external network requests
-- ✅ Full keyboard navigation support
-- ✅ Proper ARIA labels and semantic HTML
-- ✅ Module interoperability verified
-- ✅ Offline operation confirmed
-
-## Browser Compatibility
-
-- Chrome/Edge 90+
-- Firefox 88+
-- Safari 14+
-- Any modern browser with ES6+ support and localStorage
-
-## Development Notes
-
-- Vanilla JavaScript (no frameworks)
-- No external dependencies
-- Modular architecture for easy maintenance
-- Each module has clear responsibilities
-- Functions are pure and testable
-- Global namespace pollution minimized
-
-## Testing
-
-Run the QA checklist from browser console:
-
-```javascript
-App.runQAChecklist()
+### Manual Deployment
+```bash
+npm run build
+# Deploy dist/index.html to any static hosting
 ```
 
-This returns an object with results for:
-- Offline operation
-- Form validation
-- Input masks
-- Accessibility
-- Color contrast
-- Module interoperability
-- Console errors
+## 💻 Development
 
-## License
+### Local Development
+Simply open `index.html` in a modern browser. No build step required for development.
 
-MIT
+### Testing Data
+- Application seeds sample data automatically on first run
+- Use Settings → Reseed Data to regenerate sample data
+- Use Settings → Clear Storage to reset everything
+
+### Browser Requirements
+- Modern browser with ES6 support
+- localStorage enabled
+- JavaScript enabled
+
+## 📱 Usage Guide
+
+### Getting Started
+1. Open the application
+2. Navigate to **Directories** to add clients, vehicles, and services
+3. Go to **New Order** to create service orders
+4. View all orders in **Orders Registry**
+5. See scheduled orders in **Calendar**
+6. Export data from **Export** section
+
+### Creating an Order
+1. Click **New Order** in the main navigation
+2. Select a client (vehicle dropdown updates automatically)
+3. Select a vehicle
+4. Choose a scheduled date
+5. Optionally assign a lift
+6. Click **+ Add Service** to add services to the order
+7. Apply discount if needed (VAT calculates automatically)
+8. Add notes if needed
+9. Click **Create Order**
+
+### Managing Directories
+1. Navigate to **Directories**
+2. Switch between Clients, Vehicles, and Services tabs
+3. Click **Add** button to create new entries
+4. Click **Edit** on any card to modify
+5. Click **Delete** to remove (with confirmation)
+6. Use search and filters to find entries
+
+### Viewing and Filtering Orders
+1. Go to **Orders Registry**
+2. Use the search box to find specific orders
+3. Apply filters (status, date range, client, lift)
+4. Click on column headers to sort
+5. View summary statistics at the top
+6. Click **View** to see order details
+7. Click **Delete** to remove orders
+
+### Using the Calendar
+1. Navigate to **Calendar**
+2. Use Previous/Next buttons to navigate weeks
+3. See which lifts are assigned on which days
+4. Filter by specific lift to focus view
+5. Color-coded markers show order status
+
+### Exporting Data
+1. Go to **Export** section
+2. **Export CSV**: Click to download all orders as CSV
+3. **Print Order**: Select an order and click Print
+4. **Export HTML**: Select an order and export as standalone HTML file
+
+## 🤝 Contributing
+
+This is a complete, integrated application combining features from multiple development branches. All modules work together seamlessly through the global StorageManager.
+
+## 📄 License
+
+This project is open source and available under the MIT License.
+
+## 🎯 Features Checklist
+
+✅ Client directory with CRUD operations
+✅ Vehicle directory with client linking
+✅ Service catalog management
+✅ Comprehensive order form with calculations
+✅ Orders registry with filtering and search
+✅ Lift scheduling calendar
+✅ CSV export functionality
+✅ Print-ready order documents
+✅ HTML export for sharing
+✅ Offline-first architecture
+✅ LocalStorage persistence
+✅ Sample data seeding
+✅ Settings management
+✅ Accessibility compliance (WCAG AA)
+✅ Responsive design
+✅ Keyboard navigation
+✅ Modal dialogs
+✅ Confirmation dialogs
+✅ Toast notifications
+✅ Form validation
+✅ Real-time calculations
+✅ Status tracking
+✅ Summary statistics
+
+## 📞 Support
+
+For issues or questions, please create an issue in the GitHub repository.
